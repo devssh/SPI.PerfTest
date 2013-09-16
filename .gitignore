@@ -1,0 +1,10 @@
+*.idea
+*.iml
+target
+.settings
+.cache
+
+.classpath
+*.sc
+.worksheet
+.project
