@@ -26,5 +26,5 @@ class UserLoginSimulation extends Simulation {
       .param("user", """${username}""")
       .param("password", """${password}""")
       .check(status.is(200)))
-  setUp(scn.inject(ramp(200 users) over (20 seconds))).protocols(httpConf)
+  setUp(scn.inject(ramp(6000 users) over (20 seconds))).protocols(httpConf)
 }

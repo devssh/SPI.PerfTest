@@ -31,5 +31,5 @@ class NowShowingSimulation extends Simulation {
       status.is(200),
       css(""" div.movie__title """).exists
     ))
-  setUp(scn.inject(ramp(100 users) over (10 seconds))).protocols(httpConf)
+  setUp(scn.inject(ramp(1000 users) over (10 seconds))).protocols(httpConf)
 }
