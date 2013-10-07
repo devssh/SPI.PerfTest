@@ -24,6 +24,7 @@ class NowShowingSimulation extends Simulation {
       .check(
       css( """ul.movie__grid li.movie__grid__item:first-child a.filter-value""", "href").exists.saveAs("movie_url"),
       status.is(200)))
+
    .exec(
     http("request_2")
       .get("${movie_url}")
@@ -31,5 +32,6 @@ class NowShowingSimulation extends Simulation {
       status.is(200),
       css(""" div.movie__title """).exists
     ))
-  setUp(scn.inject(ramp(1000 users) over (10 seconds))).protocols(httpConf)
+
+  setUp(scn.inject(ramp(100 users) over (10 seconds))).protocols(httpConf)
 }
