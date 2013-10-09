@@ -24,34 +24,47 @@ class ShowTimeSimulation extends Simulation {
 			"Cache-Control" -> """no-cache""",
 			"Content-Type" -> """application/x-www-form-urlencoded; charset=UTF-8""",
 			"Pragma" -> """no-cache""",
+			"Cookie" -> """cityName=chennai""",
 			"X-Requested-With" -> """XMLHttpRequest"""
+  )
+
+  val headers_12 = Map(
+    		"Accept" -> """application/json, text/javascript, */*; q=0.01""",
+    		"Cache-Control" -> """no-cache""",
+    		"Content-Type" -> """application/json; charset=UTF-8;""",
+            "Origin" -> """http://localhost""",
+            "Referer" -> """http://localhost/chennai""",
+            "Host" -> """localhost""",
+            "Cookie" -> """cityName=chennai""",
+    	    "X-Requested-With" -> """XMLHttpRequest"""
   )
 
     val movieFeeder = csv("movie_name.csv").random
     val userFeeder = csv("user_credentials.csv").random
 
-      val scn = scenario("Show Times")
+     val scn = scenario("Show Times")
 
 	    .exec(http("request_3")
-					.get("/chennai/show-times/08-10-2013")
-					.check(status.is(200))
-			)
-		.pause(4)
-        .exec(http("request_5")
-        	.get("/account/logged")
-        	.headers(headers_5)
-        	.check(status.is(401))
-        )
-        .pause(13)
-            .feed(userFeeder)
-            .exec(http("request_6")
-            	.post("/account/authenticate")
-            	.headers(headers_6)
-            	.param("user", "${username}")
-            	.param("password", "${password}")
-            .check(status.is(200)))
+			.get("/chennai/show-times/17-10-2013")
+			.check(status.is(200))
+		)
+		.pause(500 milliseconds)
 
-        .pause(27 milliseconds)
+        .exec(http("request_5")
+            .get("/account/logged")
+            .headers(headers_5)
+            .check(status.is(401))
+        )
+        .pause(500 milliseconds)
+
+        .feed(userFeeder)
+        .exec(http("request_6")
+            .post("/account/authenticate")
+            .headers(headers_6)
+            .param("user", """${username}""")
+            .param("password", """${password}""")
+        .check(status.is(200)))
+        .pause(500 milliseconds)
 
         .feed(movieFeeder)
         .exec(http("request_8")
@@ -59,6 +72,13 @@ class ShowTimeSimulation extends Simulation {
 			.param("""sessionId""", """${session_id}""")
      		.param("""seatCategory""", """ELITE""")
      		.param("""quantity""", """2"""))
+     	.pause(1)
 
-        setUp(scn.inject(ramp(800 users) over (10 seconds))).protocols(httpConf)
+        .exec(http("request_12")
+           .post("/screen/layout")
+           .headers(headers_12)
+           .body(StringBody("""{"sessionId":"${session_id}","quantity":"2","seatCategory":"ELITE"}""")).asJSON
+           .check(status.is(200)))
+
+        setUp(scn.inject(ramp(500 users) over (10 seconds))).protocols(httpConf)
 }

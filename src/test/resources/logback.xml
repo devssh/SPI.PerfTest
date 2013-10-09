@@ -13,9 +13,11 @@
 	</appender>
 
 	<!-- Uncomment for logging HTTP responses on check failure -->
-	<logger name="io.gatling.http.ahc.GatlingAsyncHandlerActor" level="TRACE" />
+	<!-- <logger name="io.gatling.http.ahc.GatlingAsyncHandlerActor" level="DEBUG" /> -->
+	 <logger name="io.gatling.http.ahc.GatlingAsyncHandlerActor" level="TRACE" />
 
-	<root level="DEBUG">
+	<!--<root level="DEBUG">-->
+	<root level="WARN">
 		<appender-ref ref="CONSOLE" />
 	</root>
 
