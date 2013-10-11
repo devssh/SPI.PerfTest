@@ -8,7 +8,7 @@ import bootstrap._
 
 class ShowTimeSimulation extends Simulation {
   val httpConf = http
-    .baseURL("http://10.16.3.236")
+    .baseURL("http://192.168.17.65")
     .acceptCharsetHeader("ISO-8859-1,utf-8;q=0.7,*;q=0.7")
     .acceptHeader("text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
     .acceptEncodingHeader("gzip, deflate")
@@ -80,5 +80,5 @@ class ShowTimeSimulation extends Simulation {
            .body(StringBody("""{"sessionId":"${session_id}","quantity":"2","seatCategory":"ELITE"}""")).asJSON
            .check(status.is(200)))
 
-        setUp(scn.inject(ramp(500 users) over (10 seconds))).protocols(httpConf)
+        setUp(scn.inject(ramp(100 users) over (10 seconds))).protocols(httpConf)
 }
