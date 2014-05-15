@@ -5,11 +5,12 @@ import io.gatling.http.Predef._
 import scala.concurrent.duration._
 import assertions._
 import bootstrap._
+import spicinemas.utils.Properties._
 
 class NowShowingSimulation extends Simulation {
 
   val httpConf = http
-    .baseURL("http://10.16.3.236")
+    .baseURL(baseUrl)
     .acceptCharsetHeader("ISO-8859-1,utf-8;q=0.7,*;q=0.7")
     .acceptHeader("text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
     .acceptEncodingHeader("gzip, deflate")

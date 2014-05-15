@@ -16,4 +16,7 @@ To run a specific simulation you have to use this command :
 
 ```
 mvn gatling:execute -Dgatling.simulation=basic.BasicExampleSimulation
+
+mvn gatling:execute -Dgatling.simulationClass=spicinemas.simulations.NowShowingSimulation
+mvn gatling:execute -Dgatling.simulationClass=spicinemas.simulations.ShowTimeSimulation
 ```
