@@ -1,20 +1,37 @@
-movie_name,session_id
-the-amazing-spiderman-2,Sathyam Cinemas18750
-vaayai-moodi-pesavum,Escape18552
-million-dollar-arm,Sathyam Cinemas18782
-rio-2,LUXE1386
-rio-2,LUXE1384
-the-amazing-spiderman-2,LUXE1383
-the-amazing-spiderman-2,Sathyam Cinemas18365
-2-states,LUXE1375
-rio-2,Escape18567
-yamirukka-bayamey,Escape18703
-son-of-god,Escape18542
-son-of-god,LUXE1369
-race-gurram,Escape18565
-cuckoo,S2 CINEMAS THEYAGARAJA5458
-vaayai-moodi-pesavum,LUXE1379
-vaayai-moodi-pesavum,Sathyam Cinemas18784
-kochadaiiyaan,LUXE1359
-queen,Escape18564
-vallavanukku-pullum-aayudham,Escape18702
+movie_name,session_id,cinema_name
+vallavanukku-pullum-aayudham,LUXE1731,LUXE
+vallavanukku-pullum-aayudham,LUXE1732,LUXE
+vallavanukku-pullum-aayudham,LUXE1733,LUXE
+yamirukka-bayamey,LUXE1735,LUXE
+oculus,LUXE1742,LUXE
+2-states,LUXE1743,LUXE
+2-states,LUXE1744,LUXE
+rio-2,LUXE1746,LUXE
+rio-2,LUXE1747,LUXE
+rio-2,LUXE1748,LUXE
+the-amazing-spiderman-2,LUXE1750,LUXE
+the-amazing-spiderman-2,LUXE1751,LUXE
+the-amazing-spiderman-2,LUXE1752,LUXE
+vaayai-moodi-pesavum,LUXE1754,LUXE
+vaayai-moodi-pesavum,LUXE1755,LUXE
+vaayai-moodi-pesavum,LUXE1756,LUXE
+million-dollar-arm,LUXE1758,LUXE
+race-gurram,LUXE1759,LUXE
+the-children-of-war-nine-months-to-freedom,LUXE1760,LUXE
+godzilla,S2 CINEMAS THEYAGARAJA5691,S2 CINEMAS THEYAGARAJA
+thenaliraman,Escape19145,Escape
+godzilla,Escape19157,Escape
+godzilla,Escape19158,Escape
+the-xpose,Escape19149,Escape
+mighty-raju-rio-calling,Sathyam Cinemas19210,Sathyam Cinemas
+the-amazing-spiderman-2,Escape19156,Escape
+hawaa-hawaai,Escape19152,Escape
+2-states,S2 PERAMBUR15426,S2 PERAMBUR
+2-states,S2 PERAMBUR15427,S2 PERAMBUR
+godzilla,S2 CINEMAS THEYAGARAJA5520,S2 CINEMAS THEYAGARAJA
+yamirukka-bayamey,S2 CINEMAS THEYAGARAJA5521,S2 CINEMAS THEYAGARAJA
+yamirukka-bayamey,S2 CINEMAS THEYAGARAJA5522,S2 CINEMAS THEYAGARAJA
+vallavanukku-pullum-aayudham,S2 CINEMAS THEYAGARAJA5523,S2 CINEMAS THEYAGARAJA
+vallavanukku-pullum-aayudham,S2 CINEMAS THEYAGARAJA5524,S2 CINEMAS THEYAGARAJA
+queen,Escape19537,Escape
+queen,Escape19513,Escape

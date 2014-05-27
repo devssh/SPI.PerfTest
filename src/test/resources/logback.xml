@@ -13,14 +13,14 @@
 	</appender>
 
 	<!-- Uncomment for logging HTTP responses on check failure -->
-	<!-- <logger name="io.gatling.http.ahc.GatlingAsyncHandlerActor" level="TRACE" /> -->
-	<logger name="io.gatling.http" level="ERROR" />
+	<logger name="io.gatling.http.ahc.GatlingAsyncHandlerActor" level="TRACE" />
+	<!-- <logger name="io.gatling.http" level="TRACE" /> -->
 	 <!-- <logger name="io.gatling.http.ahc.GatlingAsyncHandlerActor" level="INFO" /> -->
 	 <!-- <logger name="io.gatling.http.ahc.GatlingAsyncHandlerActor" level="INFO" /> -->
 	 <!-- <logger name="com.excilys.ebi.gatling.http" level="TRACE" /> -->
 
 	<!--<root level="DEBUG">-->
-	<root level="ERROR">
+	<root level="TRACE">
 		<appender-ref ref="CONSOLE" />
 	</root>
 
