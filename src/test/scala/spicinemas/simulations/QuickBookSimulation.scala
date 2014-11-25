@@ -31,6 +31,13 @@ class QuickBookSimulation extends Simulation {
 			"X-Requested-With" -> """XMLHttpRequest"""
   )
 
+  val headerWebForm = Map(
+      "Cache-Control" -> """no-cache""",
+      "Content-Type" -> """application/x-www-form-urlencoded; charset=UTF-8""",
+      "Pragma" -> """no-cache""",
+      "Cookie" -> "cityName=chennai"
+  )
+
   val headerAjaxJson = Map(
         "Accept" -> """application/json, text/javascript, */*; q=0.01""",
         "Cache-Control" -> """no-cache""",
@@ -87,18 +94,21 @@ class QuickBookSimulation extends Simulation {
       .check(status.is(200))
     )
     .pause(500 milliseconds)        
+
     .exec(http("order status")
       .post("/order/status")
       .headers(headerAjaxJson)
       .body(StringBody("""{"sessionId":"${session_id}","quantity":"1","seatCategory":"ELITE"}""")).asJSON
       .check(status.is(200))
     )
+
     .exec(http("auto select")
       .post("/chennai/ticket/${movie_name}/auto-select")
       .headers(headerAjaxJson)      
       .body(StringBody("""{"sessionId":"${session_id}","quantity":"1","seatCategory":"ELITE","movieName":"${movie_name}","isAutoSelected":true}""")).asJSON
       .check(status.is(200))
     )
+
     .exec(http("book")
       .post("/chennai/ticket/${movie_name}/book")
       .param("""sessionId""", """${session_id}""")
@@ -108,6 +118,7 @@ class QuickBookSimulation extends Simulation {
       .param("""selectedCity""","""chennai""")
       .check(status.is(200), css("""#orderId""","value").exists.saveAs("orderId"))
     )    
+
     .exec(http("orderDetail")
       .get("/order/details")      
       .headers(hearderForJsonGet)              
@@ -115,6 +126,7 @@ class QuickBookSimulation extends Simulation {
       .queryParam("""quantity""","""1""")
       .queryParam("""seatCategory""","""ELITE""")            
       .check(status.is(200)))
+
     .exec(http("get food")
       .post("/food")      
       .headers(headerAjaxJson)              
@@ -130,12 +142,14 @@ class QuickBookSimulation extends Simulation {
       .get("/payment/options")
       .check(status.is(200))
     )
-    // .pause(300 milliseconds)
-    // .exec(http("cancel ticket")
-    //   .post("/chennai/ticket/cancel")
-    //   .headers(headerAjaxJson)
-    //   .body(StringBody("""{"sessionId":"${session_id}","selectedCity":"chennai","orderId":${orderId},"seatCategory":"ELITE","quantity":"1"}""")).asJSON          
-    //   .check(status.is(200))
-    // )    
-  setUp(scn.inject(ramp(200 users) over (5 seconds))).protocols(httpConf)
+    .pause(300 milliseconds)
+    .exec(http("book fuel")
+    .post("/fuel")
+    .param("""fuelCardNumber""","9800000112223137")
+    .param("""pin""","1977")
+    .param("""orderId""","${orderId}")
+    .param("""tc""","true")
+    .check(status.is(303)))
+
+  setUp(scn.inject(ramp(1 users) over (1 seconds))).protocols(httpConf)
 }
