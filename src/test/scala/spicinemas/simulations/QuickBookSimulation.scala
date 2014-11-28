@@ -55,8 +55,8 @@ class QuickBookSimulation extends Simulation {
         "X-Requested-With" -> """XMLHttpRequest"""
   )
 
-    val movieFeeder = csv("movie_name.csv").random
-    val userFeeder = csv("user_credentials.csv").random
+    val movieFeeder = csv("movie_name.csv").circular
+    val userFeeder = csv("user_credentials.csv").circular
 
     val scn = scenario("quick book")        
     .exec(http("account-logged")
@@ -127,23 +127,25 @@ class QuickBookSimulation extends Simulation {
       .queryParam("""seatCategory""","""ELITE""")            
       .check(status.is(200)))
 
-    .exec(http("get food")
-      .post("/food")      
+    .exec(http("buy food")
+      .post("/food/buy")      
       .headers(headerAjaxJson)              
-      .body(StringBody("""$cinema_name""")).asJSON
+      .body(StringBody("""{"orderId":"${orderId}","foodWithQty":{}}""")).asJSON
       .check(status.is(200)))        
-    // .exec(http("buy food")
-    //   .post("/food/buy")
-    //   .headers(headerAjaxJson)      
-    //   .body(StringBody("""{"orderId":"$orderId","foodWithQty":{"578":1,"623":1}}""")).asJSON
-    //   .check(status.is(200))
-    // )
+    
     .exec(http("get payment options")
       .get("/payment/options")
       .check(status.is(200))
     )
     .pause(300 milliseconds)
-    .exec(http("book fuel")
+
+    .exec(http("start pay")
+      .post("/payment/juspay")      
+      .headers(headerAjaxJson)              
+      .body(StringBody("""{"orderId":"${orderId}"}""")).asJSON
+      .check(status.is(200)))
+
+    .exec(http("confirm fuel pay")
     .post("/fuel")
     .param("""fuelCardNumber""","9800000112223137")
     .param("""pin""","1977")
@@ -151,5 +153,5 @@ class QuickBookSimulation extends Simulation {
     .param("""tc""","true")
     .check(status.is(303)))
 
-  setUp(scn.inject(ramp(1 users) over (1 seconds))).protocols(httpConf)
+  setUp(scn.inject(ramp(3000 users) over (120 seconds))).protocols(httpConf)
 }
