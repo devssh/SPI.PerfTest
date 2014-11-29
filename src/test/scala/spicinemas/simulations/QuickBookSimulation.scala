@@ -86,72 +86,86 @@ class QuickBookSimulation extends Simulation {
       .get("/chennai/sessions")                    
       .check(status.is(200))
     )
+    .exitHereIfFailed
     .feed(movieFeeder)
-    .exec(http("post sessions")
-      .post("/chennai/sessions")
-      .headers(headerAjaxJson)
-        .body(StringBody("""{"cinema":"${cinema_name}","date":"""" + s"${currentDate}" + """","movie":"${movie_name}"}""")).asJSON
-      .check(status.is(200))
+    .exec(http("get movie session")
+      .get("/chennai/showtimes/${movie_name}/{$date}")
+      .check(status.is(200), xpath("""//li[@data-session-id='"${session_id}"']/@class""").exists.saveAs("sessionClassNames"))
     )
-    .pause(500 milliseconds)        
-
-    .exec(http("order status")
-      .post("/order/status")
-      .headers(headerAjaxJson)
-      .body(StringBody("""{"sessionId":"${session_id}","quantity":"1","seatCategory":"ELITE"}""")).asJSON
-      .check(status.is(200))
-    )
-
-    .exec(http("auto select")
-      .post("/chennai/ticket/${movie_name}/auto-select")
-      .headers(headerAjaxJson)      
-      .body(StringBody("""{"sessionId":"${session_id}","quantity":"1","seatCategory":"ELITE","movieName":"${movie_name}","isAutoSelected":true}""")).asJSON
-      .check(status.is(200))
-    )
-
-    .exec(http("book")
-      .post("/chennai/ticket/${movie_name}/book")
-      .param("""sessionId""", """${session_id}""")
-      .param("""seatCategory""", """ELITE""")
-      .param("""quantity""", """1""")
-      .param("""cityName""","""chennai""")
-      .param("""selectedCity""","""chennai""")
-      .check(status.is(200), css("""#orderId""","value").exists.saveAs("orderId"))
-    )    
-
-    .exec(http("orderDetail")
-      .get("/order/details")      
-      .headers(hearderForJsonGet)              
-      .queryParam("""sessionId""","""${session_id}""")
-      .queryParam("""quantity""","""1""")
-      .queryParam("""seatCategory""","""ELITE""")            
-      .check(status.is(200)))
-
-    .exec(http("buy food")
-      .post("/food/buy")      
-      .headers(headerAjaxJson)              
-      .body(StringBody("""{"orderId":"${orderId}","foodWithQty":{}}""")).asJSON
-      .check(status.is(200)))        
     
-    .exec(http("get payment options")
-      .get("/payment/options")
-      .check(status.is(200))
-    )
-    .pause(300 milliseconds)
+    .doIf(session => session.getAttribute("sessionClassNames").contains("available")) {
+      .exec(http("order status")
+        .post("/order/status")
+        .headers(headerAjaxJson)
+        .body(StringBody("""{"sessionId":"${session_id}","quantity":"1","seatCategory":"ELITE"}""")).asJSON
+        .check(status.is(200))
+      )
+      .pause(500 milliseconds)        
 
-    .exec(http("start pay")
-      .post("/payment/juspay")      
-      .headers(headerAjaxJson)              
-      .body(StringBody("""{"orderId":"${orderId}"}""")).asJSON
-      .check(status.is(200)))
+      .exec(http("book")
+        .post("/chennai/ticket/${movie_name}/book")
+        .param("""sessionId""", """${session_id}""")
+        .param("""seatCategory""", """ELITE""")
+        .param("""quantity""", """1""")
+        .param("""cityName""","""chennai""")
+        .param("""selectedCity""","""chennai""")
+        .check(status.is(200), css("""#orderId""","value").exists.saveAs("orderId"))
+      )
 
-    .exec(http("confirm fuel pay")
-    .post("/fuel")
-    .param("""fuelCardNumber""","9800000112223137")
-    .param("""pin""","1977")
-    .param("""orderId""","${orderId}")
-    .param("""tc""","true")
-    .check(status.is(303)))
+      .exec(http("layout")
+       .post("/screen/layout")
+       .headers(headers_12)
+       .body(StringBody("""{"sessionId":"${session_id}","quantity":"1","seatCategory":"ELITE","orderId":"${orderId}","isAutoSelected":false}""")).asJSON
+       .check(status.is(200)))
+       .pause(2 seconds)    
 
+      .exec(http("orderDetail")
+        .get("/order/details")      
+        .headers(hearderForJsonGet)              
+        .queryParam("""sessionId""","""${session_id}""")
+        .queryParam("""quantity""","""1""")
+        .queryParam("""seatCategory""","""ELITE""")            
+        .check(status.is(200)))
+       .pause(500 milliseconds)
+
+      .exec(http("auto select")
+        .post("/chennai/ticket/${movie_name}/auto-select")
+        .headers(headerAjaxJson)      
+        .body(StringBody("""{"sessionId":"${session_id}","quantity":"1","seatCategory":"ELITE","movieName":"${movie_name}","isAutoSelected":true}""")).asJSON
+        .check(status.is(200))
+      )
+      .exitHereIfFailed
+      .pause(2 seconds)
+
+      .exec(http("buy food")
+        .post("/food/buy")      
+        .headers(headerAjaxJson)              
+        .body(StringBody("""{"orderId":"${orderId}","foodWithQty":{}}""")).asJSON
+        .check(status.is(200)))        
+      .pause(500 milliseconds)
+
+      .exec(http("get payment options")
+        .get("/payment/options")
+        .check(status.is(200))
+      )
+      .pause(500 milliseconds)
+
+      .exec(http("start pay")
+        .post("/payment/juspay")      
+        .headers(headerAjaxJson)              
+        .body(StringBody("""{"orderId":"${orderId}"}""")).asJSON
+        .check(status.is(200)))
+      .exitHereIfFailed
+      .pause(1 seconds)
+      
+
+      .exec(http("confirm fuel pay")
+      .post("/fuel")
+      .param("""fuelCardNumber""","9800000112223137")
+      .param("""pin""","1977")
+      .param("""orderId""","${orderId}")
+      .param("""tc""","true")
+      .check(status.is(303)))
+  }
   setUp(scn.inject(ramp(3000 users) over (120 seconds))).protocols(httpConf)
 }

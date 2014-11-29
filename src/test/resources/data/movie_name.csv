@@ -1,25 +1,8 @@
-movie_name,session_id,cinema_name
-kaththi,LUXE10455,LUXE
-kaththi,LUXE10456,LUXE
-kaththi,LUXE10493,LUXE
-kaththi,LUXE10494,LUXE
-kaththi,LUXE10495,LUXE
-kaththi,LUXE10496,LUXE
-kaththi,LUXE10533,LUXE
-kaththi,LUXE10534,LUXE
-kaththi,LUXE10535,LUXE
-kaththi,LUXE10536,LUXE
-kaththi,LUXE10653,LUXE
-kaththi,LUXE10654,LUXE
-kaththi,LUXE10655,LUXE
-kaththi,Escape31423,Escape
-kaththi,Sathyam Cinemas31458,Sathyam Cinemas
-kaththi,Escape31479,Escape
-kaththi,Escape31485,Escape
-kaththi,LUXE10656,LUXE
-kaththi,Sathyam Cinemas31514,Sathyam Cinemas
-kaththi,Escape31535,Escape
-kaththi,Escape31541,Escape
-kaththi,Sathyam Cinemas31570,Sathyam Cinemas
-kaththi,Escape31591,Escape
-kaththi,Escape31597,Escape
+movie_name,session_id,cinema_name,date
+kaththi,LUXE10533,LUXE,30-11-2014
+kaththi,LUXE10534,LUXE,30-11-2014
+kaththi,LUXE10535,LUXE,30-11-2014
+kaththi,LUXE10536,LUXE,30-11-2014
+kaththi,LUXE10653,LUXE,01-12-2014
+kaththi,LUXE10654,LUXE,01-12-2014
+kaththi,LUXE10655,LUXE,01-12-2014
