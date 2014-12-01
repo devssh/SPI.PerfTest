@@ -18,21 +18,39 @@ class NowShowingSimulation extends Simulation {
     .disableFollowRedirect
     .shareConnections
 
-  val scn = scenario("Get now showing")
-    .exec(
-    http("request_1")
+  val movieFeeder = csv("movie_name.csv").circular
+
+  val scn = scenario("Get now showing and show times")
+    .exec(http("home page")
+      .get("/")
+      .check(status.is(200)))
+    .pause(500 milliseconds)
+    .exec(session => {
+      import java.net.URI      
+      import io.gatling.http.cookie._;
+      import com.ning.http.client._;
+
+      val customCookie1 = new Cookie(domain, "cityName", "chennai", "/", 864000, false)
+      val customCookie2 = new Cookie(domain, "selectedCity", "chennai", "/", 864000, false)
+      val cookieStore = CookieJar(new URI(baseUrl), List(customCookie1, customCookie2))
+      session.set("gatling.http.cookies", cookieStore)
+    })
+    .exec(http("now showing page")
       .get("/chennai/now-showing")
-      .check(
-      css( """ul.movie__grid li.movie__grid__item:first-child a.filter-value""", "href").exists.saveAs("movie_url"),
-      status.is(200)))
+      .check(status.is(200)))
+    .pause(500 milliseconds)
+   .feed(movieFeeder)
+   .exec(http("show times page for a movie")
+      .get("/chennai/now-showing/${movie_name}")
+      .check(status.is(200)))
+   .pause(500 milliseconds)
+    .exec(http("get movie session")
+      .get("/chennai/now-showing/${movie_name}/${date}")
+      .check(status.is(200)))
+    .pause(500 milliseconds)
+    .exec(http("showtimes page page")
+      .get("/chennai/show-times")
+      .check(status.is(200)))
 
-   .exec(
-    http("request_2")
-      .get("${movie_url}")
-      .check(
-      status.is(200),
-      css(""" div.movie__title """).exists
-    ))
-
-  setUp(scn.inject(ramp(100 users) over (10 seconds))).protocols(httpConf)
+  setUp(scn.inject(ramp(10000 users) over (100 seconds))).protocols(httpConf)
 }
