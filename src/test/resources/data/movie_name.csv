@@ -1,21 +1,100 @@
 movie_name,session_id,cinema_name,date
-happy-ending,Sathyam Cinemas31614,Sathyam Cinemas,02-12-2014
-happy-ending,Sathyam Cinemas31615,Sathyam Cinemas,02-12-2014
-happy-ending,Sathyam Cinemas31616,Sathyam Cinemas,02-12-2014
-happy-ending,Escape31641,Escape,02-12-2014
-happy-ending,Escape31644,Escape,02-12-2014
-happy-ending,Escape31654,Escape,02-12-2014
-happy-ending,Sathyam Cinemas31558,Sathyam Cinemas,01-12-2014
-happy-ending,Sathyam Cinemas31559,Sathyam Cinemas,01-12-2014
-happy-ending,Sathyam Cinemas31560,Sathyam Cinemas,01-12-2014
-happy-ending,LUXE10581,LUXE,02-12-2014
-happy-ending,LUXE10582,LUXE,02-12-2014
-happy-ending,LUXE10583,LUXE,02-12-2014
-happy-ending,LUXE10584,LUXE,02-12-2014
-happy-ending,LUXE10661,LUXE,01-12-2014
-happy-ending,LUXE10662,LUXE,01-12-2014
-happy-ending,LUXE10663,LUXE,01-12-2014
-happy-ending,LUXE10664,LUXE,01-12-2014
-happy-ending,Escape31585,Escape,01-12-2014
-happy-ending,Escape31588,Escape,01-12-2014
-happy-ending,Escape31598,Escape,01-12-2014
+kaththi,Escape32449,Escape,12-12-2014
+kaththi,Escape32391,Escape,11-12-2014
+kaththi,Escape32395,Escape,12-12-2014
+kaththi,Sathyam Cinemas32254,Sathyam Cinemas,12-12-2014
+kaththi,Sathyam Cinemas32250,Sathyam Cinemas,11-12-2014
+poojai,Escape32417,Escape,11-12-2014
+poojai,Escape32421,Escape,12-12-2014
+poojai,Escape32336,Escape,11-12-2014
+poojai,Escape32340,Escape,12-12-2014
+gone-girl,Escape32281,Escape,12-12-2014
+gone-girl,Escape32277,Escape,11-12-2014
+gone-girl,Sathyam Cinemas32251,Sathyam Cinemas,11-12-2014
+gone-girl,Sathyam Cinemas32255,Sathyam Cinemas,12-12-2014
+fury,Escape32278,Escape,11-12-2014
+fury,Escape32282,Escape,12-12-2014
+kill-dil,Sathyam Cinemas32223,Sathyam Cinemas,11-12-2014
+kill-dil,Sathyam Cinemas32227,Sathyam Cinemas,12-12-2014
+kill-dil,Escape32422,Escape,12-12-2014
+kill-dil,Escape32418,Escape,11-12-2014
+thirudan-police,Sathyam Cinemas32195,Sathyam Cinemas,11-12-2014
+thirudan-police,Sathyam Cinemas32199,Sathyam Cinemas,12-12-2014
+thirudan-police,Sathyam Cinemas32165,Sathyam Cinemas,11-12-2014
+thirudan-police,Sathyam Cinemas32169,Sathyam Cinemas,12-12-2014
+thirudan-police,Escape32389,Escape,11-12-2014
+thirudan-police,Escape32390,Escape,11-12-2014
+thirudan-police,Escape32392,Escape,11-12-2014
+thirudan-police,Escape32393,Escape,12-12-2014
+thirudan-police,Escape32394,Escape,12-12-2014
+thirudan-police,Escape32396,Escape,12-12-2014
+john-wick,Escape32447,Escape,11-12-2014
+john-wick,Escape32451,Escape,12-12-2014
+happy-ending,Sathyam Cinemas32166,Sathyam Cinemas,11-12-2014
+happy-ending,Sathyam Cinemas32167,Sathyam Cinemas,11-12-2014
+happy-ending,Sathyam Cinemas32168,Sathyam Cinemas,11-12-2014
+happy-ending,Sathyam Cinemas32170,Sathyam Cinemas,12-12-2014
+happy-ending,Sathyam Cinemas32171,Sathyam Cinemas,12-12-2014
+happy-ending,Sathyam Cinemas32172,Sathyam Cinemas,12-12-2014
+happy-ending,Escape32450,Escape,12-12-2014
+happy-ending,Escape32446,Escape,11-12-2014
+happy-ending,Escape32368,Escape,12-12-2014
+happy-ending,Escape32361,Escape,11-12-2014
+happy-ending,Escape32364,Escape,11-12-2014
+happy-ending,Escape32365,Escape,12-12-2014
+dumb-and-dumber-to,Escape32476,Escape,11-12-2014
+dumb-and-dumber-to,Escape32480,Escape,12-12-2014
+dumb-and-dumber-to,Escape32283,Escape,12-12-2014
+dumb-and-dumber-to,Escape32279,Escape,11-12-2014
+dumb-and-dumber-to,Sathyam Cinemas32249,Sathyam Cinemas,11-12-2014
+dumb-and-dumber-to,Sathyam Cinemas32253,Sathyam Cinemas,12-12-2014
+vanmham,Sathyam Cinemas32139,Sathyam Cinemas,11-12-2014
+vanmham,Sathyam Cinemas32140,Sathyam Cinemas,11-12-2014
+vanmham,Sathyam Cinemas32143,Sathyam Cinemas,12-12-2014
+vanmham,Sathyam Cinemas32144,Sathyam Cinemas,12-12-2014
+vanmham,Escape32420,Escape,11-12-2014
+vanmham,Escape32424,Escape,12-12-2014
+vanmham,Escape32334,Escape,11-12-2014
+vanmham,Escape32337,Escape,12-12-2014
+vanmham,Escape32338,Escape,12-12-2014
+vanmham,Sathyam Cinemas32142,Sathyam Cinemas,12-12-2014
+vanmham,Escape32333,Escape,11-12-2014
+naaigal-jaakirathai,Sathyam Cinemas32194,Sathyam Cinemas,11-12-2014
+naaigal-jaakirathai,Sathyam Cinemas32196,Sathyam Cinemas,11-12-2014
+naaigal-jaakirathai,Sathyam Cinemas32197,Sathyam Cinemas,12-12-2014
+naaigal-jaakirathai,Escape32306,Escape,11-12-2014
+naaigal-jaakirathai,Escape32310,Escape,12-12-2014
+the-equalizer,Escape32362,Escape,11-12-2014
+the-equalizer,Escape32366,Escape,12-12-2014
+the-equalizer,Sathyam Cinemas32252,Sathyam Cinemas,11-12-2014
+the-equalizer,Sathyam Cinemas32256,Sathyam Cinemas,12-12-2014
+kaadu,Sathyam Cinemas32228,Sathyam Cinemas,12-12-2014
+kaadu,Sathyam Cinemas32224,Sathyam Cinemas,11-12-2014
+kaadu,Escape32473,Escape,11-12-2014
+kaadu,Escape32477,Escape,12-12-2014
+lal-bahadhoor-shasthri,Escape32284,Escape,12-12-2014
+lal-bahadhoor-shasthri,Escape32280,Escape,11-12-2014
+happy-new-year,Sathyam Cinemas32222,Sathyam Cinemas,11-12-2014
+happy-new-year,Escape32419,Escape,11-12-2014
+titoo-mba,Escape32335,Escape,11-12-2014
+titoo-mba,Escape32339,Escape,12-12-2014
+oru-oorula-rendu-raja,Escape32308,Escape,11-12-2014
+oru-oorula-rendu-raja,Escape32312,Escape,12-12-2014
+nightcrawler,Escape32305,Escape,11-12-2014
+nightcrawler,Escape32309,Escape,12-12-2014
+big-hero-6,Escape32479,Escape,12-12-2014
+big-hero-6,Escape32474,Escape,11-12-2014
+big-hero-6,Escape32475,Escape,11-12-2014
+big-hero-6,Escape32478,Escape,12-12-2014
+interstellar,Sathyam Cinemas32115,Sathyam Cinemas,12-12-2014
+interstellar,Sathyam Cinemas32116,Sathyam Cinemas,12-12-2014
+interstellar,Sathyam Cinemas32109,Sathyam Cinemas,11-12-2014
+interstellar,Sathyam Cinemas32110,Sathyam Cinemas,11-12-2014
+interstellar,Sathyam Cinemas32111,Sathyam Cinemas,11-12-2014
+interstellar,Sathyam Cinemas32112,Sathyam Cinemas,11-12-2014
+interstellar,Sathyam Cinemas32113,Sathyam Cinemas,12-12-2014
+interstellar,Sathyam Cinemas32114,Sathyam Cinemas,12-12-2014
+interstellar,Escape32448,Escape,11-12-2014
+interstellar,Escape32452,Escape,12-12-2014
+interstellar,Escape32307,Escape,11-12-2014
+interstellar,Escape32311,Escape,12-12-2014

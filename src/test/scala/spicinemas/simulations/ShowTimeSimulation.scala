@@ -62,7 +62,10 @@ class ShowTimeSimulation extends Simulation {
 	 //  )    
 
 		// .pause(500 milliseconds)
-
+    .exec(http("home page")
+      .get("/")
+    .check(status.is(200)))
+    .pause(500 milliseconds)
     .exec(http("account-logged")
         .get("/account/logged")
         .headers(headers_5)
@@ -85,6 +88,7 @@ class ShowTimeSimulation extends Simulation {
         .param("user", """${username}""")
         .param("password", """${password}""")
     .check(status.is(200)))
+    .exitHereIfFailed
     .pause(200 milliseconds)
     
     .feed(movieFeeder)
@@ -108,7 +112,8 @@ class ShowTimeSimulation extends Simulation {
           .param("""selectedCity""","""chennai""")
           .check(status.is(200), css("""#orderId""","value").exists.saveAs("orderId"))
         )
-     	  .pause(1000 milliseconds)
+    .exitHereIfFailed
+    .pause(1 second)
 
     .exec(http("orderDetail")
       .get("/order/details")      
@@ -129,7 +134,8 @@ class ShowTimeSimulation extends Simulation {
      // .param("isAutoSelected", """false""")
      .body(StringBody("""{"sessionId":"${session_id}","quantity":"1","seatCategory":"ELITE","orderId":"${orderId}","isAutoSelected":false}""")).asJSON
      .check(status.is(200)))
-     .pause(10 seconds)
+     .exitHereIfFailed
+     .pause(1 second)
 
   .exec(http("cancel")
      .post("/chennai/ticket/cancel")
@@ -137,5 +143,5 @@ class ShowTimeSimulation extends Simulation {
      .body(StringBody("""{"sessionId":"${session_id}","selectedCity":"chennai","orderId":"${orderId}"}""")).asJSON
      .check(status.is(200)))
 
-  setUp(scn.inject(ramp(2000 users) over (60 seconds))).protocols(httpConf)
+  setUp(scn.inject(ramp(5000 users) over (300 seconds))).protocols(httpConf)
 }

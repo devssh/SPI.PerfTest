@@ -18,7 +18,21 @@ class NowShowingSimulation extends Simulation {
     .disableFollowRedirect
     .shareConnections
 
+val headers_5 = Map(
+        "X-Requested-With" -> """XMLHttpRequest""",
+        """Cookie""" -> """cityName=chennai"""
+    )
+
+val headers_6 = Map(
+      "Cache-Control" -> """no-cache""",
+      "Content-Type" -> """application/x-www-form-urlencoded; charset=UTF-8""",
+      "Pragma" -> """no-cache""",
+      "Cookie" -> "cityName=chennai",
+      "X-Requested-With" -> """XMLHttpRequest"""
+  )
+
   val movieFeeder = csv("movie_name.csv").circular
+  val userFeeder = csv("user_credentials.csv").circular
 
   val scn = scenario("Get now showing and show times")
     .exec(http("home page")
@@ -35,22 +49,22 @@ class NowShowingSimulation extends Simulation {
       val cookieStore = CookieJar(new URI(baseUrl), List(customCookie1, customCookie2))
       session.set("gatling.http.cookies", cookieStore)
     })
-    .exec(http("now showing page")
-      .get("/chennai/now-showing")
-      .check(status.is(200)))
-    .pause(500 milliseconds)
-   .feed(movieFeeder)
-   .exec(http("show times page for a movie")
-      .get("/chennai/now-showing/${movie_name}")
-      .check(status.is(200)))
-   .pause(500 milliseconds)
-    .exec(http("get movie session")
-      .get("/chennai/now-showing/${movie_name}/${date}")
-      .check(status.is(200)))
-    .pause(500 milliseconds)
     .exec(http("showtimes page page")
       .get("/chennai/show-times")
       .check(status.is(200)))
-
-  setUp(scn.inject(ramp(10000 users) over (100 seconds))).protocols(httpConf)
+    .pause(500 milliseconds)
+    .feed(userFeeder)
+    .exec(http("account-logged")
+        .get("/account/logged")
+        .headers(headers_5)
+        .check(status.is(401))
+    )
+    .pause(500 milliseconds)
+    .exec(http("authenticate")
+        .post("/account/authenticate")
+        .headers(headers_6)
+        .param("user", """${username}""")
+        .param("password", """${password}""")
+    .check(status.is(200)))
+  setUp(scn.inject(ramp(10000 users) over (120 seconds))).protocols(httpConf)
 }
