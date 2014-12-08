@@ -54,8 +54,8 @@ class QuickBookSimulation extends Simulation {
         "X-Requested-With" -> """XMLHttpRequest"""
   )
 
-    val movieFeeder = csv("movie_name.csv").circular
-    val userFeeder = csv("user_credentials.csv").circular
+    val movieFeeder = csv("movie_name_2.csv").circular
+    val userFeeder = csv("user_credentials_2.csv").circular
 
     val scn = scenario("quick book")
     .exec(http("account-logged")
@@ -104,7 +104,7 @@ import com.ning.http.client._
         .check(status.is(200))
       )
       .pause(500 milliseconds)
-
+      .exitHereIfFailed
       .exec(http("book")
         .post("/chennai/ticket/${movie_name}/book")
         .param("""sessionId""", """${session_id}""")
@@ -114,14 +114,14 @@ import com.ning.http.client._
         .param("""selectedCity""","""chennai""")
         .check(status.is(200), css("""#orderId""","value").exists.saveAs("orderId"))
       )
-
+      .exitHereIfFailed
       .exec(http("layout")
        .post("/screen/layout")
        .headers(headerAjaxJson)
        .body(StringBody("""{"sessionId":"${session_id}","quantity":"1","seatCategory":"ELITE","orderId":"${orderId}","isAutoSelected":false}""")).asJSON
        .check(status.is(200)))
        .pause(2 seconds)
-
+      .exitHereIfFailed
       .exec(http("orderDetail")
         .get("/order/details")
         .headers(hearderForJsonGet)
@@ -130,7 +130,7 @@ import com.ning.http.client._
         .queryParam("""seatCategory""","""ELITE""")
         .check(status.is(200)))
        .pause(500 milliseconds)
-
+      .exitHereIfFailed
       .exec(http("auto select")
         .post("/chennai/ticket/${movie_name}/auto-select")
         .headers(headerAjaxJson)
@@ -139,13 +139,12 @@ import com.ning.http.client._
       )
       .exitHereIfFailed
       .pause(2 seconds)
-
       .exec(http("get payment options")
         .get("/payment/options")
         .check(status.is(200))
       )
       .pause(500 milliseconds)
-
+      .exitHereIfFailed
       .exec(http("start pay")
         .post("/payment/juspay")
         .headers(headerAjaxJson)
@@ -153,14 +152,12 @@ import com.ning.http.client._
         .check(status.is(200)))
       .exitHereIfFailed
       .pause(1 seconds)
-
-
       .exec(http("confirm fuel pay")
       .post("/fuel")
-      .param("""fuelCardNumber""","9800000112223137")
-      .param("""pin""","1977")
+      .param("""fuelCardNumber""","9000000000000000")
+      .param("""pin""","1111")
       .param("""orderId""","${orderId}")
       .param("""tc""","true")
       .check(status.is(303)))
-  setUp(scn.inject(ramp(3000 users) over (100 seconds))).protocols(httpConf)
+  setUp(scn.inject(ramp(5000 users) over (200 seconds))).protocols(httpConf)
 }

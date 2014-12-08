@@ -2,12 +2,11 @@ package spicinemas.simulations
 
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
-import scala.concurrent.duration._
-import assertions._
-import bootstrap._
 import spicinemas.utils.Properties._
 
-class ShowTimeSimulation extends Simulation {
+import scala.concurrent.duration._
+
+class LayoutSimulation extends Simulation {
   val httpConf = http
     .baseURL(baseUrl)
     .acceptCharsetHeader("ISO-8859-1,utf-8;q=0.7,*;q=0.7")
@@ -54,18 +53,7 @@ class ShowTimeSimulation extends Simulation {
     val movieFeeder = csv("movie_name.csv").circular
     val userFeeder = csv("user_credentials.csv").circular
 
-    val scn = scenario("Show Times")    
-  //   .exec(http("show-times")
-		// 	.get(s"/chennai/show-times/$currentDate")
-  //       .queryParam("seats","2")
-		// 	.check(status.is(200))
-	 //  )    
-
-		// .pause(500 milliseconds)
-    .exec(http("home page")
-      .get("/")
-    .check(status.is(200)))
-    .pause(500 milliseconds)
+    val scn = scenario("Layout")
     .exec(http("account-logged")
         .get("/account/logged")
         .headers(headers_5)
@@ -73,9 +61,10 @@ class ShowTimeSimulation extends Simulation {
     )
     .pause(500 milliseconds)
     .exec(session => {
-      import java.net.URI      
+      import java.net.URI
+
+import com.ning.http.client._
       import io.gatling.http.cookie._;
-      import com.ning.http.client._;
 
       val customCookie = new Cookie(domain, "cityName", "chennai", "/", 864000, false)
       val cookieStore = CookieJar(new URI(baseUrl), List(customCookie))
@@ -90,19 +79,14 @@ class ShowTimeSimulation extends Simulation {
     .check(status.is(200)))
     .exitHereIfFailed
     .pause(200 milliseconds)
-    
+
     .feed(movieFeeder)
     .exec(http("order status")
       .post("/order/status")
       .headers(headers_12)
       .body(StringBody("""{"sessionId":"${session_id}","quantity":"1","seatCategory":"ELITE"}""")).asJSON
-      // .param("""sessionId""", """${session_id}""")
-      // .param("""seatCategory""", """ELITE""")
-      // .param("""quantity""", """2""")
       .check(status.is(200))
     )
-    //.pause(300 milliseconds)
-
     .exec(http("book")
           .post("/chennai/ticket/${movie_name}/book")
         	.param("""sessionId""", """${session_id}""")
@@ -114,34 +98,25 @@ class ShowTimeSimulation extends Simulation {
         )
     .exitHereIfFailed
     .pause(1 second)
-
     .exec(http("orderDetail")
-      .get("/order/details")      
-      .headers(hearderForJsonGet)              
+      .get("/order/details")
+      .headers(hearderForJsonGet)
       .queryParam("""sessionId""","""${session_id}""")
       .queryParam("""quantity""","""1""")
-      .queryParam("""seatCategory""","""ELITE""")            
-      .check(status.is(200)))      
-      // .check(jsonPath("$.orderId").saveAs("orderId")))
-
-  .exec(http("layout")
-     .post("/screen/layout")
-     .headers(headers_12)
-     // .param("sessionId", """${session_id}""")
-     // .param("quantity", """2""")
-     // .param("seatCategory", """ELITE""")
-     // .param("orderId", """${orderId}""")
-     // .param("isAutoSelected", """false""")
-     .body(StringBody("""{"sessionId":"${session_id}","quantity":"1","seatCategory":"ELITE","orderId":"${orderId}","isAutoSelected":false}""")).asJSON
-     .check(status.is(200)))
-     .exitHereIfFailed
-     .pause(1 second)
-
-  .exec(http("cancel")
-     .post("/chennai/ticket/cancel")
-     .headers(headers_12)
-     .body(StringBody("""{"sessionId":"${session_id}","selectedCity":"chennai","orderId":"${orderId}"}""")).asJSON
-     .check(status.is(200)))
-
-  setUp(scn.inject(ramp(5000 users) over (300 seconds))).protocols(httpConf)
+      .queryParam("""seatCategory""","""ELITE""")
+      .check(status.is(200)))
+      .exitHereIfFailed
+    .exec(http("layout")
+       .post("/screen/layout")
+       .headers(headers_12)
+       .body(StringBody("""{"sessionId":"${session_id}","quantity":"1","seatCategory":"ELITE","orderId":"${orderId}","isAutoSelected":false}""")).asJSON
+       .check(status.is(200)))
+       .exitHereIfFailed
+       .pause(1 second)
+    .exec(http("cancel")
+       .post("/chennai/ticket/cancel")
+       .headers(headers_12)
+       .body(StringBody("""{"sessionId":"${session_id}","selectedCity":"chennai","orderId":"${orderId}"}""")).asJSON
+       .check(status.is(200)))
+  setUp(scn.inject(ramp(15000 users) over (200 seconds))).protocols(httpConf)
 }
