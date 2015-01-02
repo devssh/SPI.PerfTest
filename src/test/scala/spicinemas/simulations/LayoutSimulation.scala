@@ -94,7 +94,7 @@ import com.ning.http.client._
 		.param("""quantity""", """1""")
           .param("""cityName""","""chennai""")
           .param("""selectedCity""","""chennai""")
-          .check(status.is(200), css("""#orderId""","value").exists.saveAs("orderId"))
+          .check(status.is(200), jsonPath("$.orderId").exists.saveAs("orderId"))
         )
     .exitHereIfFailed
     .pause(1 second)
