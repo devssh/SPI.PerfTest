@@ -3,8 +3,7 @@ package spicinemas.simulations
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
 import scala.concurrent.duration._
-import assertions._
-import bootstrap._
+
 import spicinemas.utils.Properties._
 
 class BookedOrdersSimulation extends Simulation {
@@ -119,5 +118,5 @@ class BookedOrdersSimulation extends Simulation {
     //   .body(StringBody("""{"sessionId":"${session_id}","selectedCity":"chennai","orderId":${orderId},"seatCategory":"ELITE","quantity":"1"}""")).asJSON          
     //   .check(status.is(200))
     // )    
-  setUp(scn.inject(ramp(200 users) over (5 seconds))).protocols(httpConf)
+  setUp(scn.inject(ramp(1 users) over (1 seconds))).protocols(httpConf)
 }

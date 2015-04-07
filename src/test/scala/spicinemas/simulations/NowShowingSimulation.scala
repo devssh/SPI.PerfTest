@@ -2,6 +2,8 @@ package spicinemas.simulations
 
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
+import io.gatling.http.request.builder.GetHttpRequestBuilder
+import spicinemas.EndPoints._
 import spicinemas.utils.Properties._
 
 import scala.concurrent.duration._
@@ -16,22 +18,16 @@ class NowShowingSimulation extends Simulation {
     .acceptLanguageHeader("fr,fr-fr;q=0.8,en-us;q=0.5,en;q=0.3")
     .disableFollowRedirect
     .shareConnections
+  
   val headers_5 = Map(
     "X-Requested-With" -> """XMLHttpRequest""",
     """Cookie""" -> """cityName=chennai"""
   )
 
-  val headers_6 = Map(
-    "Cache-Control" -> """no-cache""",
-    "Content-Type" -> """application/x-www-form-urlencoded; charset=UTF-8""",
-    "Pragma" -> """no-cache""",
-    "Cookie" -> "cityName=chennai",
-    "X-Requested-With" -> """XMLHttpRequest"""
-  )
-
-
+ 
   val movieFeeder = csv("movie_name.csv").circular
   val userFeeder = csv("user_credentials.csv").circular
+
 
   val scn = scenario("Get now showing and show times")
     .exec(http("home page")
@@ -57,28 +53,18 @@ import com.ning.http.client._
     )
     .pause(500 milliseconds)
     .exitHereIfFailed
-    .exec(http("authenticate")
-      .post("/account/authenticate")
-      .headers(headers_6)
-      .param("user", """${username}""")
-      .param("password", """${password}"""))
+    .exec(userAuthentication)
     .exitHereIfFailed
-    .exec(http("now showing page")
-      .get("/chennai/now-showing")
-      .check(status.is(200)))
+    .exec(nowShowing)
     .pause(500 milliseconds)
     .feed(movieFeeder)
-    .exec(http("show times page for a movie")
-      .get("/chennai/now-showing/${movie_name}")
-      .check(status.is(200)))
+    .exec(nowShowingMovie)
     .pause(500 milliseconds)
-    .exec(http("get movie session")
-      .get("/chennai/now-showing/${movie_name}/${date}")
-      .check(status.is(200)))
+    .exec(nowShowingSession)
     .pause(500 milliseconds)
     .exec(http("showtimes page page")
       .get("/chennai/show-times")
       .check(status.is(200)))
 
-  setUp(scn.inject(ramp(15000 users) over (200 seconds))).protocols(httpConf)
+  setUp(scn.inject(ramp(1 users) over (1 seconds))).protocols(httpConf)
 }
