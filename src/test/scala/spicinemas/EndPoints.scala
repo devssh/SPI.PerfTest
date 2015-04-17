@@ -74,10 +74,13 @@ object EndPoints {
     .check(status.is(200))
 
   var orderConfirm =  http("order confirm")
-    .get("order/cc-confirm")
+    .get("/order/cc-confirm")
     .queryParam( "order_id", "${orderId}")
     .queryParam( "status", "CHARGED")
     .queryParam( "status_id", "21")
     .check(status.is(200))
 
+  var paymentOptions =  http("payment options")
+    .get("/payment/options")
+    .check(status.is(200))
 }

@@ -20,25 +20,25 @@ class LayoutSimulation extends Simulation with Logging {
 
 
   val scn = scenario("Layout")
-    .exec(loggedUserCheck)
-    .pause(500 milliseconds)
+//    .exec(loggedUserCheck)
+//    .pause(500 milliseconds)
     .feed(userFeeder)
     .exec(userAuthentication)
     .exitHereIfFailed
     .pause(200 milliseconds)
-    .feed(movieFeeder)
-    .exec(orderStatus)
-    .exec(orderCreate)
-    .exitHereIfFailed
-    .pause(1 second)
-    .exec(orderDetails)
-    .exitHereIfFailed
-    .exec(seatLayout)
-    .exitHereIfFailed
-    .pause(1 second)
-    .exec(cancelOrder)
-//  .exec(paymnetInitiate)
+//    .feed(movieFeeder)
+    //    .exec(orderStatus)
+    //    .exec(orderCreate)
+    //    .exitHereIfFailed
+    //    .pause(1 second)
+    //    .exec(orderDetails)
+    //    .exitHereIfFailed
+    //    .exec(seatLayout)
+    //    .exitHereIfFailed
+    //    .pause(1 second)
+    //    .exec(cancelOrder)
+  .exec(paymentOptions)
 //  .exec(orderConfirm)
 
-  setUp(scn.inject(ramp(6000 users) over (60 seconds))).protocols(httpConf)
+  setUp(scn.inject(ramp(8000 users) over (100 seconds))).protocols(httpConf)
 }
