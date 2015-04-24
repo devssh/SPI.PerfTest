@@ -14,7 +14,8 @@ class EndToEndSimulation extends Simulation {
   val httpConf = http
     .baseURL(baseUrl)
     .disableFollowRedirect
-    .extraInfoExtractor(extraInfo => List(extraInfo.request))
+//    .extraInfoExtractor(extraInfo => List(extraInfo.request))
+    .userAgentHeader("Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:37.0) Gecko/20100101 Firefox/37.0")
 
   val movieFeeder = csv("sessions.csv").random
   val userFeeder = csv("users.csv").random
@@ -27,7 +28,7 @@ class EndToEndSimulation extends Simulation {
     .feed(userFeeder)
     .feed(movieFeeder)
     .feed(quantityFeeder)
-    .exec(checkTicket)
+    .exec(browsingAvailability)
     .exec(createOrder)
     .exec(jusPayPayment)
     .exec(checkHistory)
@@ -36,16 +37,16 @@ class EndToEndSimulation extends Simulation {
     .feed(userFeeder)
     .feed(movieFeeder)
     .feed(quantityFeeder)
-    .exec(checkTicket)
+    .exec(browsingAvailability)
     .exec(createOrder)
-    .exec(jusPayPayment)
+    .exec(fuelPayment)
     .exec(checkHistory)
 
   val cancelFlow = scenario("canceledFlow")
     .feed(userFeeder)
     .feed(movieFeeder)
     .feed(quantityFeeder)
-    .exec(checkTicket)
+    .exec(browsingAvailability)
     .exec(createOrder)
     .exec(cancelOrder)
 
@@ -53,11 +54,11 @@ class EndToEndSimulation extends Simulation {
     .feed(userFeeder)
     .feed(movieFeeder)
     .feed(quantityFeeder)
-    .exec(checkTicket)
+    .exec(browsingAvailability)
 
   setUp(
-    checkTicketFlow.inject(atOnceUsers(1))
-//    ,checkTicketFlow.inject(rampUsers(1) over (1 seconds))
-//    ,cancelFlow.inject(rampUsers(1) over (1 seconds))
+    fuelPayFlow.inject(atOnceUsers(5000)),
+    checkTicketFlow.inject(rampUsers(1000) over (100 seconds)),
+    cancelFlow.inject(rampUsers(1000) over (100 seconds))
   ).protocols(httpConf)
 }

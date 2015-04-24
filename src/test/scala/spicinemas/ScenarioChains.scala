@@ -5,19 +5,20 @@ import spicinemas.EndPoints._
 
 
 object ScenarioChains {
-  val checkTicket = scenario("checkTickets")
-    .exec(loggedUserCheck)
+  val browsingAvailability = scenario("checkTickets")
     .exec(homePage)
-    .exec(userAuthentication)
     .exec(nowShowing)
     .exec(commingSoon)
     .exec(showTimes)
     .exec(movieAvailabilityForWeek)
     .exec(moviePage)
-    .exec(sessionAvailability)
+//    .exec(sessionAvailability)
 
   val createOrder = scenario("createOrder")
-    .exec(checkTicket)
+    .exec(loggedUserCheck)
+    .exec(userAuthentication)
+    .exitHereIfFailed
+    .exec(browsingAvailability)
     .exec(checkOrderExist)
     .exec(movieDetails)
     .exec(orderCreate)
