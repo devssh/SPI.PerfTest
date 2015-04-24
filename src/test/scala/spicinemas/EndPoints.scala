@@ -10,6 +10,7 @@ object EndPoints {
   )
 
   val formHeader = Map(
+    "Cookie" -> "cityName=chennai",
     "Content-Type" -> """application/x-www-form-urlencoded; charset=UTF-8"""
   )
 
@@ -38,7 +39,7 @@ object EndPoints {
   var userAuthentication  = http("login")
     .post("/account/authenticate")
     .body(StringBody("user=${email}&password=twpass"))
-    .headers(cleanSessionHeader)
+    .headers(formHeader)
     .check(status.is(200))
 
   var nowShowing  = http("now showing page")
@@ -164,8 +165,8 @@ object EndPoints {
 
   var sessionAvailability = http("session_availability")
     .post("/chennai/sessions/session-availability")
-    .body(StringBody("""{"sessionIds": ["${sessionsByDate(date).toArray.mkString("\"","\",\"","\"")}"], "movieName": "${movie_name}""""))
-    .check(status.is(200), jsonPath("$..${category}").saveAs("availableSeats"))
+    .body(StringBody("""{"sessionIds": ["${session_id}"], "movieName": "${movie_name}""""))
+    .check(status.is(200))
 
   var vistaLayout = http("blockTicketsAndGetSeatLayout")
     .post("/vista/blockTicketsAndGetSeatLayout").asJSON

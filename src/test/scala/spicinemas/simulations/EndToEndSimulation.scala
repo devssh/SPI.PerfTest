@@ -14,7 +14,7 @@ class EndToEndSimulation extends Simulation {
   val httpConf = http
     .baseURL(baseUrl)
     .disableFollowRedirect
-    .extraInfoExtractor(extraInfo => List(extraInfo.response.bodyLength))
+    .extraInfoExtractor(extraInfo => List(extraInfo.request))
 
   val movieFeeder = csv("sessions.csv").random
   val userFeeder = csv("users.csv").random
@@ -56,8 +56,8 @@ class EndToEndSimulation extends Simulation {
     .exec(checkTicket)
 
   setUp(
-    fuelPayFlow.inject(atOnceUsers(1))
-    ,checkTicketFlow.inject(rampUsers(1) over (1 seconds))
-    ,cancelFlow.inject(rampUsers(1) over (1 seconds))
+    checkTicketFlow.inject(atOnceUsers(1))
+//    ,checkTicketFlow.inject(rampUsers(1) over (1 seconds))
+//    ,cancelFlow.inject(rampUsers(1) over (1 seconds))
   ).protocols(httpConf)
 }
