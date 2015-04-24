@@ -1,57 +1,63 @@
 package spicinemas.simulations
 
-import com.typesafe.scalalogging.slf4j.Logging
 import io.gatling.core.Predef._
+import io.gatling.core.feeder.Record
 import io.gatling.http.Predef._
-import io.gatling.http.request.builder.{PostHttpRequestBuilder, GetHttpRequestBuilder}
-import spicinemas.EndPoints._
+import spicinemas.EndPoints
+import EndPoints._
+import spicinemas.ScenarioChains._
 import spicinemas.utils.Properties._
 import scala.concurrent.duration._
-import io.gatling.core.structure.ChainBuilder._
 
-class EndToEndSimulation extends Simulation with Logging {
+class EndToEndSimulation extends Simulation {
 
   val httpConf = http
     .baseURL(baseUrl)
     .disableFollowRedirect
-  //    .extraInfoExtractor((status:Status, session:Session, req:Request, resp:Response) => { List(req.getCookies.toString())})
+    .extraInfoExtractor(extraInfo => List(extraInfo.response.bodyLength))
 
-  val movieFeeder = csv("sessions.csv").circular
-  val userFeeder = csv("users.csv").circular
+  val movieFeeder = csv("sessions.csv").random
+  val userFeeder = csv("users.csv").random
+  val quantityFeeder = csv("quantity.csv").random
 
+  val recordsByDate: Map[String, IndexedSeq[Record[String]]] = csv("sessions.csv").records.groupBy{ record => record("date") }
+  val sessionsByDate: Map[String, IndexedSeq[String]] = recordsByDate.mapValues{ records => records.map {record => record("session_id")} }
 
-
-  val scn = scenario("E2E")
+  val justPayFlow = scenario("justPayFlow")
     .feed(userFeeder)
     .feed(movieFeeder)
-    .exec(loggedUserCheck)
-    .exec(homePage)
-    .exec(userAuthentication)
-    .exec(nowShowing)
-    .exec(commingSoon)
-    .exec(showTimes)
-    .exec(movieAvailabilityForWeek)
-    .exec(moviePage)
-    .exec(movieAvailabilityForSession)
-    .exec(movieDetails)
-    .exec(orderCreate)
-    .exec(orderDetails)
-    .exec(seatLayout)
-    .exec(availableFood)
-    .exec(makeFoodOrder)
-    .exec(citrusBank)
-    .exec(paymentOptions)
-    .exec(paymentInitiate)
-    .exec(paymentBannyan)
-    .exec(activePromotions)
-    .exec(payJustPay)
-    .exec(orderConfirm)
-    .exec(bookedTicket)
-    .exec(bookedHistory)
-    .exec(preOrderHistory)
+    .feed(quantityFeeder)
+    .exec(checkTicket)
+    .exec(createOrder)
+    .exec(jusPayPayment)
+    .exec(checkHistory)
 
+  val fuelPayFlow = scenario("fuelPayFlow")
+    .feed(userFeeder)
+    .feed(movieFeeder)
+    .feed(quantityFeeder)
+    .exec(checkTicket)
+    .exec(createOrder)
+    .exec(jusPayPayment)
+    .exec(checkHistory)
 
+  val cancelFlow = scenario("canceledFlow")
+    .feed(userFeeder)
+    .feed(movieFeeder)
+    .feed(quantityFeeder)
+    .exec(checkTicket)
+    .exec(createOrder)
+    .exec(cancelOrder)
 
+  val checkTicketFlow = scenario("check_ticket_flow")
+    .feed(userFeeder)
+    .feed(movieFeeder)
+    .feed(quantityFeeder)
+    .exec(checkTicket)
 
-  setUp(scn.inject(ramp(1 users) over (1 seconds))).protocols(httpConf)
+  setUp(
+    fuelPayFlow.inject(atOnceUsers(1))
+    ,checkTicketFlow.inject(rampUsers(1) over (1 seconds))
+    ,cancelFlow.inject(rampUsers(1) over (1 seconds))
+  ).protocols(httpConf)
 }

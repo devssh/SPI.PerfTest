@@ -1,10 +1,5 @@
-*.idea
-*.iml
 target
-.settings
-.cache
-
-.classpath
-*.sc
-.worksheet
-.project
+.idea/
+src/test/resources/sessions.csv
+src/test/resources/users.csv
+.DS_Store

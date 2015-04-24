@@ -1,26 +1,43 @@
-Versions
-------------
+Start SBT
+---------
 
-The current version of the project is based on the Gatling version : **2.0.0-M3a**.
-
-Usage
------
-
-Checkout the project and run the simulations with the following command :
-
-```
-mvn gatling:execute
+```bash
+$ cd gatling-sbt-plugin-demo
+$ sbt
 ```
 
-To run a specific simulation you have to use this command :
+Compile the simulations
+-----------------------
 
-```
-mvn gatling:execute -Dgatling.simulationClass=spicinemas.simulations.EndToEndSimulation
+```bash
+> compile
 ```
 
-Data Setup
+Run all simulations
+-------------------
 
+```bash
+> test
 ```
-./load_sessions.sh 
-./load_users.sh 
+
+Run a single simulation
+-----------------------
+
+```bash
+> testOnly spicinemas.simulations.EndToEndSimulation
 ```
+
+Open the last report
+--------------------
+
+```bash
+> lastReport
+```
+
+Data
+--------------------
+```bash
+> sh load_sessions.sh
+> sh load_users.sh
+````
+
