@@ -2,7 +2,6 @@ package spicinemas
 
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
-import io.gatling.core.feeder._
 
 
 object EndPoints {
@@ -131,11 +130,6 @@ object EndPoints {
     .get("/promotions/active")
     .check(status.is(200))
 
-//
-//  var promotionEnquire :  = http("payment options")
-//    .get("/payment/options")
-//    .check(status.is(200))
-
 
   var bookedHistory = http("booked-history")
     .get("/order/booked-history")
@@ -158,7 +152,7 @@ object EndPoints {
 
   var sessionAvailability = http("session_availability")
     .post("/chennai/sessions/session-availability").asJSON
-    .body(StringBody("""{"sessionIds": ["${session_id}"],"movieName": "${movie_name}"}"""))
+    .body(StringBody("""{"sessionIds": [${session_ids}],"movieName": "${movie_name}"}"""))
     .check(status.is(200))
 
 
