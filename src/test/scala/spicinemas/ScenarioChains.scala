@@ -1,11 +1,25 @@
 package spicinemas
 
 import io.gatling.core.Predef._
+import io.gatling.core.feeder._
 import spicinemas.EndPoints._
 
-
 object ScenarioChains {
+
+  val movieFeeder = csv("sessions.csv").random
+  val userFeeder = csv("users.csv").random
+  val quantityFeeder = csv("quantity.csv").random
+
+  val recordsByDate: Map[String, IndexedSeq[Record[String]]] = csv("sessions.csv").records.groupBy{ record => record("date") }
+  val sessionsByDate: Map[String, IndexedSeq[String]] = recordsByDate.mapValues{ records => records.map {record => record("session_id")} }
+
   val browsingAvailability = scenario("checkTickets")
+    .exec({session =>
+    session("date").validate[String].map { date =>
+      val ses = sessionsByDate(date).toArray.mkString("\"","\",\"","\"")
+      session.set("session_ids", ses)
+    }
+  })
     .exec(homePage)
     .exec(nowShowing)
     .exec(commingSoon)
@@ -40,7 +54,6 @@ object ScenarioChains {
     .exec(staticTnC)
 
   val fuelPayment = scenario("make justPay payment")
-    .exec(paymentBannyan)
     .exec(payJustPay)
     .exec(fuelPay)
     .exec(bookedTicket)

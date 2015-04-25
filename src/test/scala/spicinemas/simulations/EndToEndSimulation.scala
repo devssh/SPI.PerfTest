@@ -14,16 +14,10 @@ class EndToEndSimulation extends Simulation {
 
   val httpConf = http
     .baseURL(baseUrl)
-    .disableFollowRedirect
+//    .disableFollowRedirect
     .extraInfoExtractor(dumpSessionOnFailure)
-    .userAgentHeader("Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:37.0) Gecko/20100101 Firefox/37.0")
+    .userAgentHeader("Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:37.0) Gecko/20100101 Firefox/37.0").disableResponseChunksDiscarding
 
-  val movieFeeder = csv("sessions.csv").random
-  val userFeeder = csv("users.csv").random
-  val quantityFeeder = csv("quantity.csv").random
-
-  val recordsByDate: Map[String, IndexedSeq[Record[String]]] = csv("sessions.csv").records.groupBy{ record => record("date") }
-  val sessionsByDate: Map[String, IndexedSeq[String]] = recordsByDate.mapValues{ records => records.map {record => record("session_id")} }
 
   val justPayFlow = scenario("justPayFlow").feed(userFeeder).feed(movieFeeder).feed(quantityFeeder)
     .exec(browsingAvailability)
@@ -43,17 +37,12 @@ class EndToEndSimulation extends Simulation {
     .exec(checkHistory)
 
   val checkTicketFlow = scenario("check_ticket_flow").feed(userFeeder).feed(movieFeeder).feed(quantityFeeder)
-        .exec({session =>
-        session("date").validate[String].map { date =>
-          val ses = sessionsByDate(date).toArray.mkString("\"","\",\"","\"")
-          session.set("session_ids", ses)
-        }
-      })
     .exec(browsingAvailability)
 
   setUp(
-    checkTicketFlow.inject(rampUsers(1) over (1 second))
-//    ,checkTicketFlow.inject(rampUsers(5000) over (10 seconds)),
-//    fuelPayFlow.inject(rampUsers(1000) over (10 seconds))
+    cancelFlow.inject(rampUsers(1) over (1 second)),
+    checkTicketFlow.inject(rampUsers(1) over (1 seconds)),
+    fuelPayFlow.inject(atOnceUsers(1)),
+    justPayFlow.inject(atOnceUsers(1))
   ).protocols(httpConf)
 }

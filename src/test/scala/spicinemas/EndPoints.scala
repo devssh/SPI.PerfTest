@@ -68,7 +68,7 @@ object EndPoints {
     .body(StringBody("sessionId=${session_id}&orderId=${orderId}"))
     .check(status.is(200))
 
-  var orderDetails = http("orderDetail")
+  var orderDetails = http("order_detail")
     .get("/order/details")
     .queryParam( "sessionId", "${session_id}")
     .queryParam( "quantity", "${quantity}")
@@ -86,19 +86,19 @@ object EndPoints {
     .check(status.is(200))
 
 
-  var paymentInitiate = http("payment initiate")
+  var paymentInitiate = http("payment_initiate")
     .post("/payment/initiate")
     .body(StringBody("""{"source": "WWW","amount": 430,"paymentType": "juspay","orderId":"${orderId}"}""")).asJSON
     .check(status.is(200),jsonPath("$.paymentReferenceNumber").exists.saveAs("paymentReferenceNumber"))
 
-  var orderConfirm =  http("order confirm")
+  var orderConfirm =  http("order_confirm")
     .get("/order/cc-confirm")
     .queryParam( "order_id", "${paymentReferenceNumber}")
     .queryParam( "status", "CHARGED")
     .queryParam( "status_id", "21")
-    .check(status.is(303))
+    .check(status.in(List(303,200)))
 
-  var paymentOptions =  http("payment options")
+  var paymentOptions =  http("payment_options")
     .get("/payment/options")
     .check(status.is(200))
 
@@ -140,15 +140,15 @@ object EndPoints {
     .get("/order/booked-history/0")
     .check(status.is(200))
 
-  var bookedTicket   =  http("booked ticket").get("/order/details/${orderId}").check(status.is(200))
+  var bookedTicket   =  http("booked_ticket").get("/order/details/${orderId}").check(status.is(200))
 
-  var payJustPay = http("pay citrus").post("/payment/juspay").body(StringBody("""{"orderId": "${orderId}"}""")).asJSON.check(status.is(200))
+  var payJustPay = http("pay_justpay").post("/payment/juspay").body(StringBody("""{"orderId": "${orderId}"}""")).asJSON.check(status.is(200))
 
-  var movieDetails   = http("movie_details").get("/movies/${movie_name}").check(status.is(200))
+  var movieDetails   = http("movie_details").get("/movies/${full_movie_name}").check(status.is(200))
 
   var staticTnC   = http("static_t_n_c").get("/static/t-and-c").check(status.is(200))
 
-  var fuelPay = http("fuel_pay").post("/fuel").body(StringBody("fuelCardNumber=9800000112223137&pin=1977&orderId=${orderId}&tc=true&banyan=true")).check(status.is(200))
+  var fuelPay = http("fuel_pay").post("/fuel").body(StringBody("fuelCardNumber=9800000112223137&pin=1977&orderId=${orderId}&tc=true&banyan=true")).check(status.is(303))
 
   var sessionAvailability = http("session_availability")
     .post("/chennai/sessions/session-availability").asJSON
