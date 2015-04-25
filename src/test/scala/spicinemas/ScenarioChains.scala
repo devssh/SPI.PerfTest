@@ -12,7 +12,7 @@ object ScenarioChains {
     .exec(showTimes)
     .exec(movieAvailabilityForWeek)
     .exec(moviePage)
-//    .exec(sessionAvailability)
+    .exec(sessionAvailability)
 
   val createOrder = scenario("createOrder")
     .exec(loggedUserCheck)
@@ -40,9 +40,7 @@ object ScenarioChains {
     .exec(staticTnC)
 
   val fuelPayment = scenario("make justPay payment")
-    .exec(paymentInitiate)
     .exec(paymentBannyan)
-    .exec(activePromotions)
     .exec(payJustPay)
     .exec(fuelPay)
     .exec(bookedTicket)

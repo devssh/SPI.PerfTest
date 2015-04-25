@@ -2,6 +2,7 @@ package spicinemas
 
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
+import io.gatling.core.feeder._
 
 
 object EndPoints {
@@ -31,10 +32,6 @@ object EndPoints {
     .post("/chennai/sessions/movie-availability")
     .body(StringBody( """{"sessionIds":["${session_id}"],"movieName":"${movie_name}"}""")).asJSON
     .check(status.is(200))
-
-  var sessionsAvailability = http("sessions_availablity")
-    .post("/chennai/sessions/session-availability")
-
 
   var userAuthentication  = http("login")
     .post("/account/authenticate")
@@ -144,13 +141,9 @@ object EndPoints {
     .get("/order/booked-history")
     .check(status.is(200))
 
-  var bookedHistoryTicket   = http("payment options")
+
+  var preOrderHistory  = http("pre-booked-history")
     .get("/order/booked-history/0")
-    .check(status.is(200))
-
-
-  var preOrderHistory  = http("payment options")
-    .get("/payment/options")
     .check(status.is(200))
 
   var bookedTicket   =  http("booked ticket").get("/order/details/${orderId}").check(status.is(200))
@@ -164,9 +157,11 @@ object EndPoints {
   var fuelPay = http("fuel_pay").post("/fuel").body(StringBody("fuelCardNumber=9800000112223137&pin=1977&orderId=${orderId}&tc=true&banyan=true")).check(status.is(200))
 
   var sessionAvailability = http("session_availability")
-    .post("/chennai/sessions/session-availability")
-    .body(StringBody("""{"sessionIds": ["${session_id}"], "movieName": "${movie_name}""""))
+    .post("/chennai/sessions/session-availability").asJSON
+    .body(StringBody("""{"sessionIds": ["${session_id}"],"movieName": "${movie_name}"}"""))
     .check(status.is(200))
+
+
 
   var vistaLayout = http("blockTicketsAndGetSeatLayout")
     .post("/vista/blockTicketsAndGetSeatLayout").asJSON
