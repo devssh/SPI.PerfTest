@@ -69,15 +69,13 @@ object EndPoints {
     .check(status.is(200))
 
   var orderDetails = http("order_detail")
-    .get("/order/details")
-    .queryParam( "sessionId", "${session_id}")
-    .queryParam( "quantity", "${quantity}")
-    .queryParam( "seatCategory", "${category}")
+    .get("/order/fetch_details")
+    .queryParam( "orderId", "${orderId}")
     .check(status.is(200))
 
   var seatLayout = http("layout")
     .post("/screen/layout")
-    .body(StringBody( """{"sessionId":"${session_id}","quantity":"${quantity}","seatCategory":"${category}","orderId":"${orderId}","isAutoSelected":true}""")).asJSON
+    .body(StringBody( """{"sessionId":"${session_id}","quantity":"${quantity}","seatCategory":"${category}","orderId":"${orderId}","isAutoSelected":false}""")).asJSON
     .check(status.is(200))
 
   var cancelOrder = http("cancel")

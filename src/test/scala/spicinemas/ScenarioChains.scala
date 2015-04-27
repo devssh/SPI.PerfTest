@@ -6,8 +6,8 @@ import spicinemas.EndPoints._
 
 object ScenarioChains {
 
-  val movieFeeder = csv("sessions.csv").random
-  val userFeeder = csv("users.csv").random
+  val movieFeeder = csv("sessions.csv").circular
+  val userFeeder = csv("users.csv").circular
   val quantityFeeder = csv("quantity.csv").random
 
   val recordsByDate: Map[String, IndexedSeq[Record[String]]] = csv("sessions.csv").records.groupBy{ record => record("date") }
