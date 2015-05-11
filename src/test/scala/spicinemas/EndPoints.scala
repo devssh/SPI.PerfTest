@@ -5,11 +5,12 @@ import io.gatling.http.Predef._
 
 
 object EndPoints {
-  val cleanSessionHeader = Map(
+  var
+  cleanSessionHeader = Map(
     "Cookie" -> "cityName=chennai"
   )
 
-  val formHeader = Map(
+  var formHeader = Map(
     "Cookie" -> "cityName=chennai",
     "Content-Type" -> """application/x-www-form-urlencoded; charset=UTF-8"""
   )
@@ -134,8 +135,16 @@ object EndPoints {
     .check(status.is(200))
 
 
-  var preOrderHistory  = http("pre-booked-history")
+  var bookedHistoryList  = http("booked_history_list")
     .get("/order/booked-history/0")
+    .check(status.is(200))
+
+  var preBookHistory  = http("pre_book_history")
+    .get("/pre-book/order/history/")
+    .check(status.is(200))
+
+  var preBookHistoryList  = http("pre_book_history_list")
+    .get("/pre-book/order/history/0")
     .check(status.is(200))
 
   var bookedTicket   =  http("booked_ticket").get("/order/details/${orderId}").check(status.is(200))
@@ -145,6 +154,8 @@ object EndPoints {
   var movieDetails   = http("movie_details").get("/movies/${full_movie_name}").check(status.is(200))
 
   var staticTnC   = http("static_t_n_c").get("/static/t-and-c").check(status.is(200))
+
+  var price   = http("price").get("/chennai/ticket/prices").queryParam("sessionId","${session_id}".replaceAll(" ","+")).check(status.is(200))
 
   var fuelPay = http("fuel_pay").post("/fuel").body(StringBody("fuelCardNumber=9800000112223137&pin=1977&orderId=${orderId}&tc=true&banyan=true")).check(status.is(303))
 

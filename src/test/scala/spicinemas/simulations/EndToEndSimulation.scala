@@ -14,20 +14,16 @@ class EndToEndSimulation extends Simulation {
 
   val httpConf = http
     .baseURL(baseUrl)
-//    .disableFollowRedirect
     .extraInfoExtractor(extraInfo => List(extraInfo.response,extraInfo.response.statusCode,extraInfo.response.body,extraInfo.session))
-//    .extraInfoExtractor(extraInfo => extraInfo.status match {
-//    case KO => List(extraInfo.response,extraInfo.response.statusCode,extraInfo.response.body)
-//    case _  => Nil
-//  })
     .userAgentHeader("Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:37.0) Gecko/20100101 Firefox/37.0")
+  .headers(cleanSessionHeader)
 
 
   val justPayFlow = scenario("justPayFlow").feed(userFeeder).feed(movieFeeder).feed(quantityFeeder)
     .exec(browsingAvailability)
     .exec(createOrder)
     .exec(jusPayPayment)
-    .exec(checkHistory)
+//    .exec(checkHistory)
 
   val fuelPayFlow = scenario("fuelPayFlow").feed(userFeeder).feed(movieFeeder).feed(quantityFeeder)
     .exec(browsingAvailability)
@@ -35,18 +31,21 @@ class EndToEndSimulation extends Simulation {
     .exec(fuelPayment)
 
   val cancelFlow = scenario("canceledFlow").feed(userFeeder).feed(movieFeeder).feed(quantityFeeder)
-    .exec(browsingAvailability)
     .exec(createOrder)
     .exec(cancelOrder)
 
   val checkTicketFlow = scenario("check_ticket_flow").feed(userFeeder).feed(movieFeeder).feed(quantityFeeder)
     .exec(browsingAvailability)
 
+  val checkHistoryFlow = scenario("check_history_flow").feed(userFeeder).feed(movieFeeder).feed(quantityFeeder)
+    .exec(userAuthentication)
+    .exitHereIfFailed
+  .exec(checkHistory)
+
 
   setUp(
-    cancelFlow.inject(atOnceUsers(5000))
-    ,checkTicketFlow.inject(rampUsers(5000) over (10 seconds)),
-    fuelPayFlow.inject(atOnceUsers(10)),
-    justPayFlow.inject(atOnceUsers(10))
+    checkTicketFlow.inject(atOnceUsers(10))
+//    cancelFlow.inject( atOnceUsers(5000))
+//    checkTicketFlow.inject(rampUsers(500) over (10 second))
   ).protocols(httpConf)
 }

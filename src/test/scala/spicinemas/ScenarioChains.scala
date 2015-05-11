@@ -13,6 +13,8 @@ object ScenarioChains {
   val recordsByDate: Map[String, IndexedSeq[Record[String]]] = csv("sessions.csv").records.groupBy{ record => record("date") }
   val sessionsByDate: Map[String, IndexedSeq[String]] = recordsByDate.mapValues{ records => records.map {record => record("session_id")} }
 
+  
+
   val browsingAvailability = scenario("checkTickets")
     .exec({session =>
     session("date").validate[String].map { date =>
@@ -27,14 +29,13 @@ object ScenarioChains {
     .exec(movieAvailabilityForWeek)
     .exec(moviePage)
     .exec(sessionAvailability)
+    .exec(price)
 
   val createOrder = scenario("createOrder")
     .exec(loggedUserCheck)
     .exec(userAuthentication)
     .exitHereIfFailed
-    .exec(browsingAvailability)
     .exec(checkOrderExist)
-    .exec(movieDetails)
     .exec(orderCreate)
     .exitHereIfFailed
     .exec(orderDetails)
@@ -61,5 +62,7 @@ object ScenarioChains {
 
   val checkHistory = scenario("check history")
     .exec(bookedHistory)
-    .exec(preOrderHistory)
+    .exec(bookedHistoryList)
+  .exec(preBookHistory)
+  .exec(preBookHistoryList)
 }
