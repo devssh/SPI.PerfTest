@@ -3,17 +3,22 @@ package spicinemas
 import io.gatling.core.Predef._
 import io.gatling.core.feeder._
 import spicinemas.EndPoints._
+import io.gatling.jdbc.Predef._
 
 object ScenarioChains {
 
-  val movieFeeder = csv("sessions.csv").circular
-  val userFeeder = csv("users.csv").circular
+
+  val sessionsQuery = "select movie_name as full_movie_name,slugged_movie_name as movie_name, session_id,cinema_name,date(start_time) as date,category from session_category_prices join sessions on session_id = sessions.id where start_time>CURRENT_DATE+1 and cinema_name != 'thecinema@BROOKEFIELDS' limit 500"
+  val usersQuery = "select email from users where is_active='t' and password='c++0IkxtJVE=' limit 1000"
+
+  private val dbUrl: String = "jdbc:postgresql://192.168.57.99:5432/spi_cinemas"
+  private val userName: String = "postgres"
+  val movieFeeder: RecordSeqFeederBuilder[Any] = jdbcFeeder(dbUrl, userName,"",sessionsQuery).circular
+  val userFeeder: RecordSeqFeederBuilder[Any] = jdbcFeeder(dbUrl, userName,"",usersQuery).circular
   val quantityFeeder = csv("quantity.csv").random
+  val recordsByDate: Map[Any, IndexedSeq[Record[Any]]] = movieFeeder.records.groupBy{ record => record("date") }
+  val sessionsByDate: Map[Any, IndexedSeq[Any]] = recordsByDate.mapValues{ records => records.map {record => record("session_id")} }
 
-  val recordsByDate: Map[String, IndexedSeq[Record[String]]] = csv("sessions.csv").records.groupBy{ record => record("date") }
-  val sessionsByDate: Map[String, IndexedSeq[String]] = recordsByDate.mapValues{ records => records.map {record => record("session_id")} }
-
-  
 
   val browsingAvailability = scenario("checkTickets")
     .exec({session =>
