@@ -42,10 +42,12 @@ class EndToEndSimulation extends Simulation {
     .exitHereIfFailed
   .exec(checkHistory)
 
+  val checkHomePage = scenario("check_home_page").exec(home_page)
 
   setUp(
-    checkTicketFlow.inject(atOnceUsers(10))
-//    cancelFlow.inject( atOnceUsers(5000))
+    checkTicketFlow.inject(atOnceUsers(5000)),
+    cancelFlow.inject( atOnceUsers(2000))
 //    checkTicketFlow.inject(rampUsers(500) over (10 second))
+   // checkHomePage.inject(atOnceUsers(10000))
   ).protocols(httpConf)
 }
