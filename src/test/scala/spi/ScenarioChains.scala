@@ -1,0 +1,84 @@
+package spi
+
+import io.gatling.core.Predef._
+import io.gatling.core.feeder._
+import spi.EndPoints._
+import io.gatling.jdbc.Predef._
+
+object ScenarioChains {
+
+
+  val sessionsQuery = "select movie_name as full_movie_name,slugged_movie_name as movie_name, session_id,cinema_name,date(start_time) as date,category, food_items.id as food_id " +
+    "from session_category_prices " +
+    "join sessions on session_id = sessions.id " +
+    "JOIN cinemas ON lower(cinemas.name)=lower(sessions.cinema_name) " +
+    "JOIN food_location_mapping ON food_location_mapping.location_id=cinemas.id AND food_location_mapping.is_active=true " +
+    "JOIN food_groups on food_groups.id=food_location_mapping.group_id AND food_groups.is_active=true " +
+    "JOIN food_items ON food_items.group_id=food_groups.id  AND food_items.is_active=true " +
+    "where start_time>CURRENT_DATE+1 and sessions.cinema_name != 'thecinema@BROOKEFIELDS'  and food_items.is_active='t' " +
+    "limit 500"
+  val usersQuery = "select email from users where is_active is true and password='c++0IkxtJVE=' limit 10000"
+
+  private val dbUrl: String = "jdbc:postgresql://192.168.57.106:9999/spi_cinemas"
+  private val userName: String = "postgres"
+  val movieFeeder: RecordSeqFeederBuilder[Any] = jdbcFeeder(dbUrl, userName,"",sessionsQuery).circular
+  val userFeeder: RecordSeqFeederBuilder[Any] = jdbcFeeder(dbUrl, userName,"",usersQuery).circular
+  val quantityFeeder = csv("quantity.csv").random
+//  val recordsByDate: Map[Any, IndexedSeq[Record[Any]]] = movieFeeder.records.groupBy{ record => record("date") }
+//  val sessionsByDate: Map[Any, IndexedSeq[Any]] = recordsByDate.mapValues{ records => records.map {record => record("session_id")} }
+
+
+  val browsingAvailability = scenario("checkTickets")
+//    .exec({session =>
+//    session("date").validate[String].map { date =>
+//      val ses = sessionsByDate(date).toArray.mkString("\"","\",\"","\"")
+//      session.set("session_ids", ses)
+//    }
+//  })
+    .exec(homePage)
+    .exec(nowShowing)
+    .exec(commingSoon)
+    .exec(showTimes)
+    .exec(movieAvailabilityForWeek)
+    .exec(moviePage)
+//    .exec(sessionAvailability)
+    .exec(price)
+
+  val createOrder = scenario("createOrder")
+    .exec(loggedUserCheck)
+    .exec(userAuthentication)
+    .exitHereIfFailed
+    .exec(checkOrderExist)
+//    .exec(quick_book)
+    .exec(orderCreate)
+    .exitHereIfFailed
+    .exec(orderDetails)
+    .exec(seatLayout)
+    .exec(availableFood)
+//    .exec(makeFoodOrder)
+    .exec(citrusBank)
+    .exec(paymentOptions)
+
+  val jusPayPayment = scenario("make justPay payment")
+    .exec(paymentInitiate)
+    .exec(paymentBannyan)
+    .exec(activePromotions)
+    .exec(payJustPay)
+    .exec(orderConfirm)
+    .exec(bookedTicket)
+    .exec(staticTnC)
+
+  val fuelPayment = scenario("make justPay payment")
+    .exec(fuelPay)
+    .exec(bookedTicket)
+    .exec(staticTnC)
+
+  val checkHistory = scenario("check history")
+    .exec(bookedHistory)
+    .exec(bookedHistoryList)
+  .exec(preBookHistory)
+  .exec(preBookHistoryList)
+
+  val home_page = scenario("home page")
+                  .exec(homePage)
+}

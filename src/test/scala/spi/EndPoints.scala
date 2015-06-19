@@ -1,4 +1,4 @@
-package spicinemas
+package spi
 
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
@@ -21,7 +21,7 @@ object EndPoints {
     .check(status.is(200))
 
   var commingSoon = http("comming_soon")
-    .get("/chennai/coming-soon")
+    .get("/chennai/coming-soon/")
     .check(status.is(200))
 
   var showTimes = http("show_times")
@@ -103,15 +103,15 @@ object EndPoints {
 
 
 
-  var availableFood   = http("food_availability")
+  var availableFood  = http("food_availability")
     .post("/food")
     .body(StringBody("${cinema_name}")).asJSON
     .check(status.is(200))
 
 
-  var makeFoodOrder   = http("make_food_order")
+  var makeFoodOrder  = http("make_food_order")
     .post("/food/buy")
-    .body(StringBody("""{"orderId": "${orderId}",	"foodWithQty": {"10010247": 2,"10010347": 3}}""")).asJSON
+    .body(StringBody("""{"orderId": "${orderId}",	"foodWithQty": {"${food_id}": 2}}""")).asJSON
     .check(status.is(200))
 
   var citrusBank   = http("citrus_bank")
@@ -157,12 +157,16 @@ object EndPoints {
 
   var price   = http("price").get("/chennai/ticket/prices").queryParam("sessionId","${session_id}".replaceAll(" ","+")).check(status.is(200))
 
-  var fuelPay = http("fuel_pay").post("/fuel").body(StringBody("fuelCardNumber=9800000112223137&pin=1977&orderId=${orderId}&tc=true&banyan=true")).check(status.is(303))
+  var fuelPay = http("fuel_pay").post("/fuel").body(StringBody("fuelCardNumber=9800000112223137&pin=1977&orderId=${orderId}&tc=true&banyan=true")).headers(formHeader).check(status.is(200))
 
   var sessionAvailability = http("session_availability")
     .post("/chennai/sessions/session-availability").asJSON
-    .body(StringBody("""{"sessionIds": [${session_ids}],"movieName": "${movie_name}"}"""))
+    .body(StringBody("""{"sessionIds": [${session_id}],"movieName": "${movie_name}"}"""))
     .check(status.is(200))
+
+  var quick_book = http("quick_book").post("/chennai/ticket/${movie_name}/auto-select").
+    body(StringBody("""{"sessionId": "${session_id}","seatCategory": "${category}","movieName": "${movie_name}","quantity": ${quantity},"selectedCity": "chennai","isAutoSelected": true }"""))
+    .asJSON
 
 
 

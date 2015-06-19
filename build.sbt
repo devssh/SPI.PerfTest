@@ -12,3 +12,4 @@ libraryDependencies += "org.postgresql"        % "postgresql"                % "
 libraryDependencies += "io.gatling"            % "gatling-jdbc"              % "2.1.6"           % "test"
 
 
+javaOptions in Gatling := overrideDefaultJavaOptions("-Xms1024m", "-Xmx2048m")
