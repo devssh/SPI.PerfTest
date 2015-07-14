@@ -49,6 +49,7 @@ object ScenarioChains {
     .exec(loggedUserCheck)
     .exec(loginPage)
     .exec(userAuthentication)
+    .exitHereIfFailed
     .exec(getAuthorizationToken)
     .exitHereIfFailed
     .exec(checkOrderExist)

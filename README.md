@@ -1,11 +1,3 @@
-
-Data
---------------------
-```bash
-> sh load_sessions.sh
-> sh load_users.sh
-````
-
 Run all simulations
 -------------------
 
@@ -17,7 +9,7 @@ Run a single simulation
 -----------------------
 
 ```bash
-$ sbt testOnly spicinemas.simulations.EndToEndSimulation
+$ sbt "testOnly spi.simulations.EndToEnd"
 ```
 
 Open the last report
@@ -27,4 +19,11 @@ Open the last report
 $ sbt lastReport
 ```
 
+CentOs Setup
 
+```bash
+ulimit -n 65536
+sudo sysctl -w net.ipv4.ip_local_port_range="1025 65535"
+echo 300000 | sudo tee /proc/sys/fs/nr_open
+echo 300000 | sudo tee /proc/sys/fs/file-max
+```          

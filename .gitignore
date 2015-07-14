@@ -6,3 +6,4 @@ src/test/resources/users.csv
 logs
 scripts
 1target
+endtoend*
