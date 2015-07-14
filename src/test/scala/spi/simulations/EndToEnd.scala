@@ -13,7 +13,7 @@ class EndToEnd extends Simulation {
     .baseURL(baseUrl)
     .extraInfoExtractor(extraInfo => List(extraInfo.response,extraInfo.response.statusCode,extraInfo.response.body,extraInfo.session))
     .userAgentHeader("Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:37.0) Gecko/20100101 Firefox/37.0")
-  .headers(cleanSessionHeader)
+    .disableFollowRedirect
 
   val cancelFlow = scenario("canceledFlow").feed(userFeeder).feed(movieFeeder).feed(quantityFeeder)
     .exec(createOrder)

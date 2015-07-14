@@ -1,3 +1,4 @@
+
 package spi
 
 import io.gatling.core.Predef._
@@ -5,13 +6,16 @@ import io.gatling.http.Predef._
 
 
 object EndPoints {
+
+  val cityCookie: (String, String) = "Cookie" -> "cityName=chennai"
+
   var
   cleanSessionHeader = Map(
-    "Cookie" -> "cityName=chennai"
+    cityCookie
   )
 
   var formHeader = Map(
-    "Cookie" -> "cityName=chennai",
+    cityCookie,
     "Content-Type" -> """application/x-www-form-urlencoded; charset=UTF-8"""
   )
 
@@ -33,11 +37,31 @@ object EndPoints {
     .body(StringBody( """{"sessionIds":["${session_id}"],"movieName":"${movie_name}"}""")).asJSON
     .check(status.is(200))
 
-  var userAuthentication  = http("login")
-    .post("/account/authenticate")
-    .body(StringBody("user=${email}&password=twpass"))
-    .headers(formHeader)
+  var loginPage  = http("login_page")
+    .get("/oauth2/login")
     .check(status.is(200))
+
+  var userAuthentication  = http("user authentication")
+    .post("/oauth2/login")
+    .body(StringBody("username=${email}&password=!abcd1234")).asFormUrlEncoded
+    .check(status.in(List(302)))
+
+  var loggedUserCheck = http("account-logged")
+    .get("/oauth2/authorize")
+    .queryParam("client_id","spi-web")
+    .queryParam("redirect_uri","http://devtest.spicinemas.in/user/profile")
+    .queryParam("state","spi_start")
+    .queryParam("response_type","spi_token")
+    .headers(cleanSessionHeader)
+    .check(status.in(List(302)))
+
+  var getAuthorizationToken = http("get authentication token")
+    .get("/oauth2/authorize")
+    .queryParam("client_id","spi-web")
+    .queryParam("redirect_uri","http://devtest.spicinemas.in/user/profile")
+    .queryParam("state","spi_start")
+    .queryParam("response_type","spi_token")
+    .check(status.in(List(200)), jsonPath("$.success").exists.saveAs("authToken"))
 
   var nowShowing  = http("now showing page")
     .get("/chennai/now-showing")
@@ -48,11 +72,6 @@ object EndPoints {
     .queryParam("seats", "${quantity}")
     .check(status.is(200))
 
-  var loggedUserCheck = http("account-logged")
-    .get("/account/logged")
-    .headers(cleanSessionHeader)
-    .check(status.in(List(401,200)))
-
   var checkOrderExist = http("order status")
     .post("/order/status")
     .body(StringBody( """{"sessionId":"${session_id}","quantity":"${quantity}","seatCategory":"${category}"}""")).asJSON
@@ -60,9 +79,14 @@ object EndPoints {
 
   var orderCreate = http("order create")
     .post("/chennai/ticket/${movie_name}/book")
-    .headers(formHeader)
-    .body(StringBody("sessionId=${session_id}&seatCategory=${category}&quantity=${quantity}"))
+    .header(cityCookie._1,cityCookie._2)
+    .body(StringBody("sessionId=${session_id}&seatCategory=${category}&quantity=${quantity}")).asFormUrlEncoded
     .check(status.is(200), jsonPath("$.orderId").exists.saveAs("orderId"))
+
+  var paymentStart = http("payment start")
+  .post("/order_payment/start")
+  .body(StringBody("""{"source": "WWW","orderId": "${orderId}"}""")).asJSON
+  .check(status.in(200),jsonPath("$.paymentRequestId").exists.saveAs("paymentRequestId"))
 
   var bookingPage = http("booking page")
     .post("chennai/ticket/${movie_name}/booking-page")
@@ -99,9 +123,8 @@ object EndPoints {
 
   var paymentOptions =  http("payment_options")
     .get("/payment/options")
+    .queryParam("paymentRequestId","${paymentRequestId}")
     .check(status.is(200))
-
-
 
   var availableFood  = http("food_availability")
     .post("/food")
