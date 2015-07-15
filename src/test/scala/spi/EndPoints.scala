@@ -80,37 +80,44 @@ object EndPoints {
   var orderCreate = http("order create")
     .post("/chennai/ticket/${movie_name}/book")
     .header(cityCookie._1,cityCookie._2)
+    .header("Authorization","Bearer ${authToken}")
     .body(StringBody("sessionId=${session_id}&seatCategory=${category}&quantity=${quantity}")).asFormUrlEncoded
     .check(status.is(200), jsonPath("$.orderId").exists.saveAs("orderId"))
 
   var paymentStart = http("payment start")
   .post("/order_payment/start")
-  .body(StringBody("""{"source": "WWW","orderId": "${orderId}"}""")).asJSON
+    .header("Authorization","Bearer ${authToken}")
+    .body(StringBody("""{"source": "WWW","orderId": "${orderId}"}""")).asJSON
   .check(status.in(200),jsonPath("$.paymentRequestId").exists.saveAs("paymentRequestId"))
 
   var bookingPage = http("booking page")
     .post("chennai/ticket/${movie_name}/booking-page")
+    .header("Authorization","Bearer ${authToken}")
     .body(StringBody("sessionId=${session_id}&orderId=${orderId}"))
     .check(status.is(200))
 
   var orderDetails = http("order_detail")
     .get("/order/fetch_details")
+    .header("Authorization","Bearer ${authToken}")
     .queryParam( "orderId", "${orderId}")
     .check(status.is(200))
 
   var seatLayout = http("layout")
     .post("/screen/layout")
+    .header("Authorization","Bearer ${authToken}")
     .body(StringBody( """{"sessionId":"${session_id}","quantity":"${quantity}","seatCategory":"${category}","orderId":"${orderId}","isAutoSelected":false}""")).asJSON
     .check(status.is(200))
 
   var cancelOrder = http("cancel")
     .post("/chennai/ticket/cancel")
+    .header("Authorization","Bearer ${authToken}")
     .body(StringBody( """{"sessionId":"${session_id}","selectedCity":"chennai","orderId":"${orderId}"}""")).asJSON
     .check(status.is(200))
 
 
   var paymentInitiate = http("payment_initiate")
     .post("/payment/initiate")
+    .header("Authorization","Bearer ${authToken}")
     .body(StringBody("""{"source": "WWW","amount": 430,"paymentType": "juspay","orderId":"${orderId}"}""")).asJSON
     .check(status.is(200),jsonPath("$.paymentReferenceNumber").exists.saveAs("paymentReferenceNumber"))
 
@@ -118,16 +125,19 @@ object EndPoints {
     .get("/order/cc-confirm")
     .queryParam( "order_id", "${paymentReferenceNumber}")
     .queryParam( "status", "CHARGED")
+    .header("Authorization","Bearer ${authToken}")
     .queryParam( "status_id", "21")
     .check(status.in(List(303,200)))
 
   var paymentOptions =  http("payment_options")
     .get("/payment/options")
+    .header("Authorization","Bearer ${authToken}")
     .queryParam("paymentRequestId","${paymentRequestId}")
     .check(status.is(200))
 
   var availableFood  = http("food_availability")
     .post("/food")
+    .header("Authorization","Bearer ${authToken}")
     .body(StringBody("${cinema_name}")).asJSON
     .check(status.is(200))
 
