@@ -11,7 +11,11 @@ class EndToEnd extends Simulation {
 
   val httpConf = http
     .baseURL(baseUrl)
-    .extraInfoExtractor(extraInfo => List(extraInfo.response,extraInfo.response.statusCode,extraInfo.response.body,extraInfo.session))
+    .extraInfoExtractor(extraInfo =>
+    List(extraInfo.request.getHeaders,extraInfo.request.getCookies,
+      extraInfo.request.getFormParams,extraInfo.request.getQueryParams,
+      extraInfo.response,extraInfo.response.statusCode,extraInfo.response.body,
+      extraInfo.session))
     .userAgentHeader("Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:37.0) Gecko/20100101 Firefox/37.0")
     .disableFollowRedirect
 
