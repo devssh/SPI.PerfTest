@@ -25,24 +25,15 @@ object ScenarioChains {
   val movieFeeder: RecordSeqFeederBuilder[Any] = jdbcFeeder(cinemasDbUrl, userName,"",sessionsQuery).circular
   val userFeeder: RecordSeqFeederBuilder[Any] = jdbcFeeder(authDbUrl, userName,"",usersQuery).circular
   val quantityFeeder = csv("quantity.csv").random
-//  val recordsByDate: Map[Any, IndexedSeq[Record[Any]]] = movieFeeder.records.groupBy{ record => record("date") }
-//  val sessionsByDate: Map[Any, IndexedSeq[Any]] = recordsByDate.mapValues{ records => records.map {record => record("session_id")} }
 
 
   val browsingAvailability = scenario("checkTickets")
-//    .exec({session =>
-//    session("date").validate[String].map { date =>
-//      val ses = sessionsByDate(date).toArray.mkString("\"","\",\"","\"")
-//      session.set("session_ids", ses)
-//    }
-//  })
     .exec(homePage)
     .exec(nowShowing)
     .exec(commingSoon)
     .exec(showTimes)
     .exec(movieAvailabilityForWeek)
     .exec(moviePage)
-//    .exec(sessionAvailability)
     .exec(price)
 
   val createOrder = scenario("createOrder")
@@ -52,16 +43,23 @@ object ScenarioChains {
     .exitHereIfFailed
     .exec(getAuthorizationToken)
     .exitHereIfFailed
+    .exec(setAuthCookie)
     .exec(checkOrderExist)
+    .exec(setAuthCookie)
     .exec(orderCreate)
     .exitHereIfFailed
+    .exec(setAuthCookie)
     .exec(orderDetails)
+    .exec(setAuthCookie)
     .exec(seatLayout)
     .exec(availableFood)
 //    .exec(makeFoodOrder)
+    .exec(setAuthCookie)
     .exec(citrusBank)
+    .exec(setAuthCookie)
     .exec(paymentStart)
     .exitHereIfFailed
+    .exec(setAuthCookie)
     .exec(paymentOptions)
 
   val jusPayPayment = scenario("make justPay payment")

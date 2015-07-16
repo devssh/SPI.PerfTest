@@ -19,10 +19,13 @@ object EndPoints {
     "Content-Type" -> """application/x-www-form-urlencoded; charset=UTF-8"""
   )
 
+
   var homePage = http("home_page")
     .get("/")
     .headers(cleanSessionHeader)
     .check(status.is(200))
+
+  var setAuthCookie = addCookie(Cookie("spi_access_token","${authToken}"))
 
   var commingSoon = http("comming_soon")
     .get("/chennai/coming-soon/")
@@ -54,6 +57,7 @@ object EndPoints {
     .queryParam("response_type","spi_token")
     .headers(cleanSessionHeader)
     .check(status.in(List(302)))
+
 
   var getAuthorizationToken = http("get authentication token")
     .get("/oauth2/authorize")
