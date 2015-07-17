@@ -49,6 +49,11 @@ object EndPoints {
     .body(StringBody("username=${email}&password=!abcd1234")).asFormUrlEncoded
     .check(status.in(List(302)))
 
+  var userInfo = http("user info")
+    .get("/oauth2/user/info")
+    .header("Authorization","Bearer ${authToken}")
+    .check(status.in(List(304,200)))
+
   var loggedUserCheck = http("account-logged")
     .get("/oauth2/authorize")
     .queryParam("client_id","spi-web")
@@ -80,6 +85,8 @@ object EndPoints {
     .post("/order/status")
     .body(StringBody( """{"sessionId":"${session_id}","quantity":"${quantity}","seatCategory":"${category}"}""")).asJSON
     .check(status.is(200))
+
+
 
   var orderCreate = http("order create")
     .post("/chennai/ticket/${movie_name}/book")
