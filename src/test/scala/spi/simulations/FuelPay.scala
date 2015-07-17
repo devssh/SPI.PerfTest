@@ -28,7 +28,7 @@ class FuelPay extends Simulation{
     .exec(loggedUserCheck)
     .exec(userAuthentication)
     .exitHereIfFailed
-    .exec(checkOrderExist)
+    .exec(orderStatus)
     .exec(quick_book)
     .exec(orderCreate)
     .exitHereIfFailed

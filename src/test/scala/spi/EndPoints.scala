@@ -76,7 +76,7 @@ object EndPoints {
     .queryParam("seats", "${quantity}")
     .check(status.is(200))
 
-  var checkOrderExist = http("order status")
+  var orderStatus = http("order status")
     .post("/order/status")
     .body(StringBody( """{"sessionId":"${session_id}","quantity":"${quantity}","seatCategory":"${category}"}""")).asJSON
     .check(status.is(200))
