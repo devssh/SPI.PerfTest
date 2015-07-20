@@ -2,9 +2,8 @@ package spi.simulations
 
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
-import spi.EndPoints
 import spi.EndPoints._
-import spi.ScenarioChains._
+import spi.DataSetup._
 import spi.utils.Properties._
 
 class Auth extends Simulation {
@@ -18,9 +17,7 @@ class Auth extends Simulation {
     .userAgentHeader("Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:37.0) Gecko/20100101 Firefox/37.0")
     .disableFollowRedirect
 
-
-
-  val userFlow = scenario("canceledFlow").feed(userFeeder)
+  val userFlow = scenario("Authentication").feed(userFeeder)
     .exec(loggedUserCheck)
     .exec(loginPage)
     .exec(userAuthentication)

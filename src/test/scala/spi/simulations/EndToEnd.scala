@@ -5,6 +5,7 @@ import io.gatling.http.Predef._
 import spi.EndPoints
 import EndPoints._
 import spi.ScenarioChains._
+import spi.DataSetup._
 import spi.utils.Properties._
 
 class EndToEnd extends Simulation {
