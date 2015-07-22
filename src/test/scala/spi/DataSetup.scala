@@ -3,7 +3,10 @@ package spi
 
 import io.gatling.core.Predef._
 import io.gatling.core.feeder.RecordSeqFeederBuilder
+import io.gatling.core.validation.Validation
 import io.gatling.jdbc.Predef._
+import com.redis._
+import io.gatling.redis.feeder.RedisFeeder
 
 
 object DataSetup {
@@ -27,5 +30,16 @@ object DataSetup {
   val movieFeeder: RecordSeqFeederBuilder[Any] = jdbcFeeder(cinemasDbUrl, userName,"",sessionsQuery).circular
   val userFeeder: RecordSeqFeederBuilder[Any] = jdbcFeeder(authDbUrl, userName,"",usersQuery).circular
   val quantityFeeder = csv("quantity.csv").random
+
+  var redisClient = new RedisClient("localhost", 6379);
+
+  var storeAuthTokenToRedis: (Session) => Validation[Session] = session => {
+    redisClient.lpush("authToken", session("authToken").as[String])
+    session
+  }
+  val redisPool = new RedisClientPool("localhost", 6379);
+  val authTokenFeeder = RedisFeeder(redisPool, "authToken")
+
+
 
 }
