@@ -23,22 +23,17 @@ object ScenarioChains {
     .exitHereIfFailed
     .exec(getAuthorizationToken)
     .exitHereIfFailed
-    .exec(orderStatus)
     .exec(setAuthCookie)
+    .exec(orderStatus)
     .exec(orderCreate)
     .exitHereIfFailed
-    .exec(setAuthCookie)
     .exec(orderDetails)
-    .exec(setAuthCookie)
     .exec(seatLayout)
     .exec(availableFood)
 //    .exec(makeFoodOrder)
-    .exec(setAuthCookie)
     .exec(citrusBank)
-    .exec(setAuthCookie)
     .exec(paymentStart)
     .exitHereIfFailed
-    .exec(setAuthCookie)
     .exec(paymentOptions)
 
   val jusPayPayment = scenario("make justPay payment")

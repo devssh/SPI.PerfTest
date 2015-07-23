@@ -23,7 +23,7 @@ class EndToEnd extends Simulation {
     .exec(createOrder)
     .exec(cancelOrder)
 
-  val checkTicketFlow = scenario("check_ticket_flow").feed(userFeeder).feed(movieFeeder).feed(quantityFeeder)
+  val checkTicketFlow = scenario("check_ticket_flow").feed(movieFeeder).feed(quantityFeeder)
     .exec(browsingAvailability)
 
 
