@@ -10,7 +10,7 @@ import io.gatling.redis.feeder.RedisFeeder
 
 
 object DataSetup {
-  val databaseUrl: String = "192.168.57.106:9999";
+  val databaseUrl: String = "192.168.57.98:5432";
 
   val sessionsQuery = "select movie_name as full_movie_name,slugged_movie_name as movie_name, session_id,cinema_name,date(start_time) as date,category, food_items.id as food_id " +
     "from session_category_prices " +
