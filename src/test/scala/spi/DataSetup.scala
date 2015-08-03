@@ -24,7 +24,7 @@ object DataSetup {
   val usersQuery = "select distinct(email) from users where is_active is true and password='yd+8vQnf2ajO3RZxAecJXw==' limit 10000"
 
   private val cinemasDbUrl: String = "jdbc:postgresql://" + databaseUrl + "/spi_cinemas"
-  private val authDbUrl: String = "jdbc:postgresql://" + databaseUrl + "/auth"
+  private val authDbUrl: String = "jdbc:postgresql://" + databaseUrl + "/spi_auth"
   private val userName: String = "postgres"
 
   val movieFeeder: RecordSeqFeederBuilder[Any] = jdbcFeeder(cinemasDbUrl, userName,"",sessionsQuery).circular
