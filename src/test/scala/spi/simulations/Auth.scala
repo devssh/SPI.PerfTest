@@ -18,12 +18,6 @@ class Auth extends Simulation {
     .userAgentHeader("Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:37.0) Gecko/20100101 Firefox/37.0")
     .disableFollowRedirect
 
-  before {
-    redisClient.flushall
-  }
-
-
-
   val userLogin = scenario("Authentication").feed(userFeeder)
     .exec(loggedUserCheck)
     .exec(loginPage)
@@ -31,18 +25,22 @@ class Auth extends Simulation {
     .exec(getAuthorizationToken)
     .exitHereIfFailed
     .exec(storeAuthTokenToRedis)
+  .rendezVous(5000)
+    .exec(userInfo)
+  .pause(10 second)
+    .exec(userInfo)
+    .pause(10 second)
+    .exec(userInfo)
+    .pause(10 second)
+    .exec(userInfo)
+    .pause(10 second)
+    .exec(userInfo)
+    .pause(10 second)
 
 
-  val getUserInfo = scenario("UserInfo").feed(authTokenFeeder).
-    exitHereIfFailed.
-    exec(setAuthCookie)
-    .repeat(5){exec(userInfo)}
 
 
   setUp(
-    userLogin.inject(rampUsers(2200) over (100 seconds)),
-    getUserInfo.inject(nothingFor(200),atOnceUsers(2000))
-//    userLogin.inject(rampUsers(20) over (10 seconds)),
-//        getUserInfo.inject(nothingFor(20 seconds),atOnceUsers(15))
+    userLogin.inject(rampUsers(5000) over (20 seconds))
   ).protocols(httpConf)
 }

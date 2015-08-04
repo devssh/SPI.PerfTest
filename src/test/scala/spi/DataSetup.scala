@@ -31,14 +31,16 @@ object DataSetup {
   val userFeeder: RecordSeqFeederBuilder[Any] = jdbcFeeder(authDbUrl, userName,"",usersQuery).circular
   val quantityFeeder = csv("quantity.csv").random
 
-  var redisClient = new RedisClient("localhost", 6379);
+  var authTokensList: List[Map[String,String]] = List[Map[String,String]]();
 
   var storeAuthTokenToRedis: (Session) => Validation[Session] = session => {
-    redisClient.lpush("authToken", session("authToken").as[String])
+    val sessionAuthToken: String = session("authToken").as[String]
+
+    authTokensList = authTokensList:+ Map("authToken"-> sessionAuthToken)
+
     session
   }
-  val redisPool = new RedisClientPool("localhost", 6379);
-  val authTokenFeeder = RedisFeeder(redisPool, "authToken")
+  var authTokenFeeder = authTokensList.toArray.circular
 
 
 
