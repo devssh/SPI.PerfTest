@@ -11,6 +11,8 @@ libraryDependencies += "io.gatling"            % "gatling-test-framework"    % "
 libraryDependencies += "org.postgresql"        % "postgresql"                % "9.4-1201-jdbc4"  % "test"
 libraryDependencies += "io.gatling"            % "gatling-jdbc"              % "2.1.7"           % "test"
 libraryDependencies += "net.debasishg"        %% "redisclient"              % "3.0"             % "test"
+libraryDependencies += "joda-time" % "joda-time" % "2.8.1"  % "test"
+
 
 
 

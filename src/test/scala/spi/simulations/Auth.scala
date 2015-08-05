@@ -24,10 +24,7 @@ class Auth extends Simulation {
     .exec(userAuthentication)
     .exec(getAuthorizationToken)
     .exitHereIfFailed
-    .exec(storeAuthTokenToRedis)
-  .rendezVous(5000)
-    .exec(userInfo)
-  .pause(10 second)
+    .rendezVous(4998)
     .exec(userInfo)
     .pause(10 second)
     .exec(userInfo)
@@ -36,9 +33,8 @@ class Auth extends Simulation {
     .pause(10 second)
     .exec(userInfo)
     .pause(10 second)
-
-
-
+    .exec(userInfo)
+    .pause(10 second)
 
   setUp(
     userLogin.inject(rampUsers(5000) over (20 seconds))

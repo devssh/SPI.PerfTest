@@ -3,6 +3,7 @@ package spi
 
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
+import org.joda.time.DateTime
 
 
 object EndPoints {
@@ -19,6 +20,8 @@ object EndPoints {
     "Content-Type" -> """application/x-www-form-urlencoded; charset=UTF-8"""
   )
 
+  val formatter =  new java.text.SimpleDateFormat("dd-MM-yyyy")
+  val tomorrowDate = formatter.format((new DateTime).plusDays(1).toDate)
 
   var homePage = http("home_page")
     .get("/")
@@ -32,7 +35,8 @@ object EndPoints {
     .check(status.is(200))
 
   var showTimes = http("show_times")
-    .get("/chennai/show-times")
+    .get("/chennai/show-times/" + tomorrowDate)
+    .queryParam("seats",2)
     .check(status.is(200))
 
   var movieAvailabilityForWeek = http("movie_availability")
@@ -99,7 +103,7 @@ object EndPoints {
   var paymentStart = http("payment start")
   .post("/order_payment/start")
     .header("Authorization","Bearer ${authToken}")
-    .body(StringBody("""{"source": "WWW","orderId": "${orderId}"}""")).asJSON
+    .body(StringBody("""{"source": "WWW","orderId": "${ orderId}"}""")).asJSON
   .check(status.in(200),jsonPath("$.paymentRequestId").exists.saveAs("paymentRequestId"))
 
   var bookingPage = http("booking page")

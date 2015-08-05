@@ -12,7 +12,9 @@ import io.gatling.redis.feeder.RedisFeeder
 object DataSetup {
   val databaseUrl: String = "192.168.57.98:5432";
 
-  val sessionsQuery = "select movie_name as full_movie_name,slugged_movie_name as movie_name, session_id,cinema_name,date(start_time) as date,category, food_items.id as food_id " +
+  val sessionsQuery = "select " +
+    "movie_name as full_movie_name,slugged_movie_name as movie_name, " +
+    "session_id,cinema_name,date(start_time) as date,category, food_items.id as food_id " +
     "from session_category_prices " +
     "join sessions on session_id = sessions.id " +
     "JOIN cinemas ON lower(cinemas.name)=lower(sessions.cinema_name) " +
@@ -21,7 +23,9 @@ object DataSetup {
     "JOIN food_items ON food_items.group_id=food_groups.id  AND food_items.is_active=true " +
     "where start_time>CURRENT_DATE+3  and start_time<=CURRENT_DATE+7 and sessions.cinema_name != 'thecinema@BROOKEFIELDS'  and food_items.is_active='t' " +
     "limit 500"
-  val usersQuery = "select distinct(email) from users where is_active is true and password='yd+8vQnf2ajO3RZxAecJXw==' limit 10000"
+  val usersQuery = "select distinct(email) from users " +
+    "where is_active is true and password='yd+8vQnf2ajO3RZxAecJXw==' " +
+    "limit 10000"
 
   private val cinemasDbUrl: String = "jdbc:postgresql://" + databaseUrl + "/spi_cinemas"
   private val authDbUrl: String = "jdbc:postgresql://" + databaseUrl + "/spi_auth"
