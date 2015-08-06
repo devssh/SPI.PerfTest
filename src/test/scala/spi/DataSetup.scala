@@ -14,14 +14,10 @@ object DataSetup {
 
   val sessionsQuery = "select " +
     "movie_name as full_movie_name,slugged_movie_name as movie_name, " +
-    "session_id,cinema_name,date(start_time) as date,category, food_items.id as food_id " +
+    "session_id,cinema_name,date(start_time) as date,category " +
     "from session_category_prices " +
     "join sessions on session_id = sessions.id " +
-    "JOIN cinemas ON lower(cinemas.name)=lower(sessions.cinema_name) " +
-    "JOIN food_location_mapping ON food_location_mapping.location_id=cinemas.id AND food_location_mapping.is_active=true " +
-    "JOIN food_groups on food_groups.id=food_location_mapping.group_id AND food_groups.is_active=true " +
-    "JOIN food_items ON food_items.group_id=food_groups.id  AND food_items.is_active=true " +
-    "where start_time>CURRENT_DATE+3  and start_time<=CURRENT_DATE+7 and sessions.cinema_name != 'thecinema@BROOKEFIELDS'  and food_items.is_active='t' " +
+    "where start_time>CURRENT_DATE+1 and sessions.cinema_name != 'thecinema@BROOKEFIELDS'  and food_items.is_active='t' " +
     "limit 500"
   val usersQuery = "select distinct(email) from users " +
     "where is_active is true and password='yd+8vQnf2ajO3RZxAecJXw==' " +
@@ -45,7 +41,5 @@ object DataSetup {
     session
   }
   var authTokenFeeder = authTokensList.toArray.circular
-
-
 
 }
