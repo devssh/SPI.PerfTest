@@ -17,7 +17,7 @@ object DataSetup {
     "session_id,cinema_name,date(start_time) as date,category " +
     "from session_category_prices " +
     "join sessions on session_id = sessions.id " +
-    "where start_time>CURRENT_DATE+1 and sessions.cinema_name != 'thecinema@BROOKEFIELDS'  and food_items.is_active='t' " +
+    "where start_time>CURRENT_DATE+1 and sessions.cinema_name != 'thecinema@BROOKEFIELDS'  " +
     "limit 500"
   val usersQuery = "select distinct(email) from users " +
     "where is_active is true and password='yd+8vQnf2ajO3RZxAecJXw==' " +
