@@ -32,9 +32,9 @@ object ScenarioChains {
     .exec(availableFood)
 //    .exec(makeFoodOrder)
     .exec(citrusBank)
-//    .exec(paymentStart)
-//    .exitHereIfFailed
-//    .exec(paymentOptions)
+    .exec(paymentStart)
+    .exitHereIfFailed
+    .exec(paymentOptions)
 
   val jusPayPayment = scenario("make justPay payment")
     .exec(paymentInitiate)
