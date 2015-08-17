@@ -103,7 +103,7 @@ object EndPoints {
   var paymentStart = http("payment start")
   .post("/order_payment/start")
     .header("Authorization","Bearer ${authToken}")
-    .body(StringBody("""{"source": "WWW","orderId": "${ orderId}"}""")).asJSON
+    .body(StringBody("""{"source": "WWW","orderId": "${orderId}"}""")).asJSON
   .check(status.in(200),jsonPath("$.paymentRequestId").exists.saveAs("paymentRequestId"))
 
   var bookingPage = http("booking page")

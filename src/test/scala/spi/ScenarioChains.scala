@@ -29,6 +29,7 @@ object ScenarioChains {
     .exitHereIfFailed
     .exec(orderDetails)
     .exec(seatLayout)
+    .exitHereIfFailed
     .exec(availableFood)
 //    .exec(makeFoodOrder)
     .exec(citrusBank)
