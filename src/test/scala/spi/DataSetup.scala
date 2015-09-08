@@ -10,11 +10,14 @@ import io.gatling.redis.feeder.RedisFeeder
 
 
 object DataSetup {
-  val databaseUrl: String = "192.168.57.98:5432";
+  val databaseUrl: String = "192.168.57.106:6543";
 
-  val sessionsQuery = "select movie_name as full_movie_name,slugged_movie_name as movie_name,session_id,cinema_name,date(start_time) as date,category" +
-    " from session_category_prices join sessions on session_id = sessions.id " +
-    "where date(start_time)=CURRENT_DATE+1 and sessions.cinema_name in ('Sathyam Cinemas','LUXE','Escape')"
+  val sessionsQuery =
+    "select movie_name as full_movie_name,slugged_movie_name as movie_name,session_id,cinema_name,date(start_time) as date,category " +
+    "from session_category_prices join sessions on session_id = sessions.id  where " +
+    "sessions.id in (select id from sessions where date(start_time) = CURRENT_DATE+8 and cinema_name = 'Sathyam Cinemas' limit 20) or " +
+    "sessions.id in (select id from sessions where date(start_time) = CURRENT_DATE+8 and cinema_name = 'LUXE' limit 20) or " +
+    "sessions.id in (select id from sessions where date(start_time) = CURRENT_DATE+8 and cinema_name = 'Escape' limit 20) "
 
   val usersQuery = "select distinct(email) from users " +
     "where is_active is true and password='yd+8vQnf2ajO3RZxAecJXw==' " +
