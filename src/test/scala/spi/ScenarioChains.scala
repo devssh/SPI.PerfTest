@@ -46,10 +46,10 @@ object ScenarioChains {
     .exec(bookedTicket)
     .exec(staticTnC)
 
-  val fuelPayment = scenario("make justPay payment")
-    .exec(fuelPay)
-    .exec(bookedTicket)
-    .exec(staticTnC)
+
+  val walletPayment = scenario("make wallet payment")
+    .exec(walletBalance)
+    .exec(walletPay)
 
   val checkHistory = scenario("check history")
     .exec(bookedHistory)

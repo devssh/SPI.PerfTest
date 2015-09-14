@@ -23,6 +23,10 @@ class EndToEnd extends Simulation {
     .exec(createOrder)
     .exec(cancelOrder)
 
+  val walletFlow = scenario("walletFlow").feed(userFeeder).feed(movieFeeder).feed(quantityFeeder)
+    .exec(createOrder)
+    .exec(walletPayment)
+
   val checkTicketFlow = scenario("check_ticket_flow").feed(movieFeeder).feed(quantityFeeder)
     .exec(browsingAvailability)
 
@@ -30,7 +34,7 @@ class EndToEnd extends Simulation {
   val checkHomePage = scenario("check_home_page").exec(home_page)
 
   setUp(
-    checkTicketFlow.inject( atOnceUsers(5000)),
-    cancelFlow.inject(atOnceUsers(2000) )
+  checkTicketFlow.inject(atOnceUsers(5000)),
+    walletFlow.inject(atOnceUsers(2000))
   ).protocols(httpConf)
 }

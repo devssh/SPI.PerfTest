@@ -198,6 +198,13 @@ object EndPoints {
 
   var bookedTicket   =  http("booked_ticket").get("/order/details/${orderId}").check(status.is(200))
 
+  var walletBalance =  http("wallet_balance").get("/wallet/fetch_balance").check(status.is(200))
+  var walletPay =  http("wallet_pay")
+    .post("/payment/wallet")
+    .body(StringBody("""entityId=${orderId}&paymentRequestId=${paymentRequestId}&tc=true&banyan=true""")).asFormUrlEncoded
+    .check(status.is(303))
+
+
   var payJustPay = http("pay_justpay").post("/payment/juspay").body(StringBody("""{"orderId": "${orderId}"}""")).asJSON.check(status.is(200))
 
   var movieDetails   = http("movie_details").get("/movies/${full_movie_name}").check(status.is(200))
