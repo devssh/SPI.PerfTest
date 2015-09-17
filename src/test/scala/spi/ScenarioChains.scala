@@ -49,7 +49,7 @@ object ScenarioChains {
 
   val walletPayment = scenario("make wallet payment")
     .exec(walletBalance)
-    .exec(walletPay)
+    .exec(payThroughWallet)
 
   val checkHistory = scenario("check history")
     .exec(bookedHistory)

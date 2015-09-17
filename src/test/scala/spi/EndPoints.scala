@@ -29,6 +29,7 @@ object EndPoints {
     .check(status.is(200))
 
   var setAuthCookie = addCookie(Cookie("spi_access_token","${authToken}"))
+  var setWalletAuthCookie = addCookie(Cookie("spi_access_token","zZ99T9rYWTVEBtKH74aqopz1DQqLEUBWtZYbwoZniNwTBxAvOvAKcF8aZ0WwA9Ax"))
 
   var commingSoon = http("comming_soon")
     .get("/chennai/coming-soon/")
@@ -199,7 +200,7 @@ object EndPoints {
   var bookedTicket   =  http("booked_ticket").get("/order/details/${orderId}").check(status.is(200))
 
   var walletBalance =  http("wallet_balance").get("/wallet/fetch_balance").check(status.is(200))
-  var walletPay =  http("wallet_pay")
+  var payThroughWallet  =  http("wallet_pay")
     .post("/payment/wallet")
     .body(StringBody("""entityId=${orderId}&paymentRequestId=${paymentRequestId}&tc=true&banyan=true""")).asFormUrlEncoded
     .check(status.is(303))
@@ -229,6 +230,50 @@ object EndPoints {
   var vistaLayout = http("blockTicketsAndGetSeatLayout")
     .post("/vista/blockTicketsAndGetSeatLayout").asJSON
     .body(StringBody( """{"sessionId":"${session_id}","quantity":1,"sessionStartDateTime":"${session_time}","ticketCode":"${ticket_code}", "vistaTransactionNumber":""}""")).asJSON
+
+
+  var walletPay = http("wallet_pay")
+    .post("/wallet/pay")
+    .header("Authorization", "Bearer OAv0pAbJTp7GqEKeC5zttDvfCWCXqS4wxx2tzw5mLfO3OBRAXkYH0nuV2S7Ip5WY")
+    .body(StringBody(
+    """ {
+          "walletId":"${wallet_id}",
+          "userId": "${user_id}",
+          "amount":100,
+          "clientIp":"10.10.1.01",
+          "orderId":"${wallet_id}",
+          "udf1":"1",
+          "udf2":"2",
+          "udf3":"3",
+          "udf4":"4",
+          "udf5":"5",
+          "udf6":"6",
+          "udf7":"7",
+          "udf8":"8",
+          "udf9":"9",
+          "udf10":"10"
+        }""")).asJSON.check(status.is(200))
+
+  var walletRecharge = http("wallet_recharge")
+    .post("/wallet/credit/recharge")
+    .header("Authorization", "Bearer OAv0pAbJTp7GqEKeC5zttDvfCWCXqS4wxx2tzw5mLfO3OBRAXkYH0nuV2S7Ip5WY")
+    .body(StringBody(
+    """ {
+          "walletId":"${wallet_id}",
+          "rechargeAmount":100,
+          "clientIp":"10.10.1.01",
+          "orderId":"123",
+          "udf1":"1",
+          "udf2":"2",
+          "udf3":"3",
+          "udf4":"4",
+          "udf5":"5",
+          "udf6":"6",
+          "udf7":"7",
+          "udf8":"8",
+          "udf9":"9",
+          "udf10":"10"
+        }""")).asJSON.check(status.is(200))
 
 
 
