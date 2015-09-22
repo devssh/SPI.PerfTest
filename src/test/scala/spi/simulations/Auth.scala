@@ -1,9 +1,8 @@
 package spi.simulations
 
 import io.gatling.core.Predef._
-import io.gatling.core.validation.Validation
 import io.gatling.http.Predef._
-import spi.EndPoints._
+import spi.endpoints.Oauth._
 import spi.DataSetup._
 import spi.utils.Properties._
 import scala.concurrent.duration._

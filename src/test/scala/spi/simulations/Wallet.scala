@@ -2,9 +2,8 @@ package spi.simulations
 
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
-import spi.EndPoints
-import EndPoints._
 import spi.DataSetup._
+import spi.endpoints.Wallet._
 import spi.utils.Properties._
 
 import scala.concurrent.duration._
@@ -27,6 +26,6 @@ class Wallet  extends Simulation  {
 
   setUp(
     walletPayRecharge.inject(
-      constantUsersPerSec(300) during(5 minute))
+      constantUsersPerSec(100) during(5 minute))
   ).protocols(httpConf)
 }

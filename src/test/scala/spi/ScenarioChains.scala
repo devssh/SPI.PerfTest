@@ -1,9 +1,10 @@
 package spi
 
 import io.gatling.core.Predef._
-import io.gatling.core.feeder._
-import spi.EndPoints._
-import io.gatling.jdbc.Predef._
+import spi.endpoints.Cinemas._
+import spi.endpoints.Oauth._
+import spi.endpoints.Payment._
+
 
 object ScenarioChains {
 

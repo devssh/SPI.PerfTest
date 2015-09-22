@@ -1,12 +1,12 @@
 
-package spi
+package spi.endpoints
 
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
 import org.joda.time.DateTime
 
 
-object EndPoints {
+object Cinemas {
 
   val cityCookie: (String, String) = "Cookie" -> "cityName=chennai"
 
@@ -44,38 +44,6 @@ object EndPoints {
     .post("/chennai/sessions/movie-availability")
     .body(StringBody( """{"sessionIds":["${session_id}"],"movieName":"${movie_name}"}""")).asJSON
     .check(status.is(200))
-
-  var loginPage  = http("login_page")
-    .get("/oauth2/login")
-    .check(status.is(200))
-
-  var userAuthentication  = http("user authentication")
-    .post("/oauth2/login")
-    .body(StringBody("username=${email}&password=!abcd1234")).asFormUrlEncoded
-    .check(status.in(List(302)))
-
-  var userInfo = http("user info")
-    .get("/oauth2/user/info")
-    .header("Authorization","Bearer ${authToken}")
-    .check(status.in(List(304,200)))
-
-  var loggedUserCheck = http("account-logged")
-    .get("/oauth2/authorize")
-    .queryParam("client_id","spi-web")
-    .queryParam("redirect_uri","http://devtest.spicinemas.in/user/profile")
-    .queryParam("state","spi_start")
-    .queryParam("response_type","spi_token")
-    .headers(cleanSessionHeader)
-    .check(status.in(List(302)))
-
-
-  var getAuthorizationToken = http("get authentication token")
-    .get("/oauth2/authorize")
-    .queryParam("client_id","spi-web")
-    .queryParam("redirect_uri","http://devtest.spicinemas.in/user/profile")
-    .queryParam("state","spi_start")
-    .queryParam("response_type","spi_token")
-    .check(status.in(List(200)), jsonPath("$.success").exists.saveAs("authToken"))
 
   var nowShowing  = http("now showing page")
     .get("/chennai/now-showing")
@@ -131,13 +99,6 @@ object EndPoints {
     .body(StringBody( """{"sessionId":"${session_id}","selectedCity":"chennai","orderId":"${orderId}"}""")).asJSON
     .check(status.is(200))
 
-
-  var paymentInitiate = http("payment_initiate")
-    .post("/payment/initiate")
-    .header("Authorization","Bearer ${authToken}")
-    .body(StringBody("""{"source": "WWW","amount": 430,"paymentType": "juspay","orderId":"${orderId}"}""")).asJSON
-    .check(status.is(200),jsonPath("$.paymentReferenceNumber").exists.saveAs("paymentReferenceNumber"))
-
   var orderConfirm =  http("order_confirm")
     .get("/order/cc-confirm")
     .queryParam( "order_id", "${paymentReferenceNumber}")
@@ -145,12 +106,6 @@ object EndPoints {
     .header("Authorization","Bearer ${authToken}")
     .queryParam( "status_id", "21")
     .check(status.in(List(303,200)))
-
-  var paymentOptions =  http("payment_options")
-    .get("/payment/options")
-    .header("Authorization","Bearer ${authToken}")
-    .queryParam("paymentRequestId","${paymentRequestId}")
-    .check(status.is(200))
 
   var availableFood  = http("food_availability")
     .post("/food")
@@ -163,17 +118,6 @@ object EndPoints {
     .post("/food/buy")
     .body(StringBody("""{"orderId": "${orderId}",	"foodWithQty": {"${food_id}": 2}}""")).asJSON
     .check(status.is(200))
-
-  var citrusBank   = http("citrus_bank")
-    .get("/citrus/banks")
-    .check(status.is(200))
-
-
-  var paymentBannyan   = http("bannyan")
-    .post("/payment/banyanAndTC")
-    .body(StringBody("""{"banyan": true,"tc": true,"orderId": "${paymentReferenceNumber}"}""")).asJSON
-    .check(status.is(200))
-
 
   var activePromotions  = http("active promotions")
     .get("/promotions/active")
@@ -200,13 +144,6 @@ object EndPoints {
   var bookedTicket   =  http("booked_ticket").get("/order/details/${orderId}").check(status.is(200))
 
   var walletBalance =  http("wallet_balance").get("/wallet/fetch_balance").check(status.is(200))
-  var payThroughWallet  =  http("wallet_pay")
-    .post("/payment/wallet")
-    .body(StringBody("""entityId=${orderId}&paymentRequestId=${paymentRequestId}&tc=true&banyan=true""")).asFormUrlEncoded
-    .check(status.is(303))
-
-
-  var payJustPay = http("pay_justpay").post("/payment/juspay").body(StringBody("""{"orderId": "${orderId}"}""")).asJSON.check(status.is(200))
 
   var movieDetails   = http("movie_details").get("/movies/${full_movie_name}").check(status.is(200))
 
@@ -230,51 +167,6 @@ object EndPoints {
   var vistaLayout = http("blockTicketsAndGetSeatLayout")
     .post("/vista/blockTicketsAndGetSeatLayout").asJSON
     .body(StringBody( """{"sessionId":"${session_id}","quantity":1,"sessionStartDateTime":"${session_time}","ticketCode":"${ticket_code}", "vistaTransactionNumber":""}""")).asJSON
-
-
-  var walletPay = http("wallet_pay")
-    .post("/wallet/pay")
-    .header("Authorization", "Bearer OAv0pAbJTp7GqEKeC5zttDvfCWCXqS4wxx2tzw5mLfO3OBRAXkYH0nuV2S7Ip5WY")
-    .body(StringBody(
-    """ {
-          "walletId":"${wallet_id}",
-          "userId": "${user_id}",
-          "amount":100,
-          "clientIp":"10.10.1.01",
-          "orderId":"${wallet_id}",
-          "udf1":"1",
-          "udf2":"2",
-          "udf3":"3",
-          "udf4":"4",
-          "udf5":"5",
-          "udf6":"6",
-          "udf7":"7",
-          "udf8":"8",
-          "udf9":"9",
-          "udf10":"10"
-        }""")).asJSON.check(status.is(200))
-
-  var walletRecharge = http("wallet_recharge")
-    .post("/wallet/credit/recharge")
-    .header("Authorization", "Bearer OAv0pAbJTp7GqEKeC5zttDvfCWCXqS4wxx2tzw5mLfO3OBRAXkYH0nuV2S7Ip5WY")
-    .body(StringBody(
-    """ {
-          "walletId":"${wallet_id}",
-          "rechargeAmount":100,
-          "clientIp":"10.10.1.01",
-          "orderId":"123",
-          "udf1":"1",
-          "udf2":"2",
-          "udf3":"3",
-          "udf4":"4",
-          "udf5":"5",
-          "udf6":"6",
-          "udf7":"7",
-          "udf8":"8",
-          "udf9":"9",
-          "udf10":"10"
-        }""")).asJSON.check(status.is(200))
-
 
 
 }
