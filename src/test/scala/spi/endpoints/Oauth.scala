@@ -23,14 +23,15 @@ object Oauth {
      .check(status.in(List(304,200)))
 
   var totpRequest = http("totp id")
-    .get("/oauth2/transaction_id")
+    .get("/oauth2/transaction_id?delivery_mode=online")
     .header("Authorization","Bearer ${authToken}")
+//    .body(StringBody("""delivery_mode:"online""")).asFormUrlEncoded
     .check(status.in(List(200)))
 
    var loggedUserCheck = http("account-logged")
      .get("/oauth2/authorize")
      .queryParam("client_id","spi-web")
-     .queryParam("redirect_uri","http://devtest.spicinemas.in/user/profile")
+     .queryParam("redirect_uri","https://devtest.spicinemas.in/user/profile")
      .queryParam("state","spi_start")
      .queryParam("response_type","spi_token")
      .check(status.in(List(302)))
@@ -39,7 +40,7 @@ object Oauth {
    var getAuthorizationToken = http("get authentication token")
      .get("/oauth2/authorize")
      .queryParam("client_id","spi-web")
-     .queryParam("redirect_uri","http://devtest.spicinemas.in/user/profile")
+     .queryParam("redirect_uri","https://devtest.spicinemas.in/user/profile")
      .queryParam("state","spi_start")
      .queryParam("response_type","spi_token")
      .check(status.in(List(200)), jsonPath("$.success").exists.saveAs("authToken"))

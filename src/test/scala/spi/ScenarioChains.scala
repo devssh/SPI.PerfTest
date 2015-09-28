@@ -32,7 +32,23 @@ object ScenarioChains {
     .exec(seatLayout)
     .exitHereIfFailed
     .exec(availableFood)
-//    .exec(makeFoodOrder)
+
+  val quickBook = scenario("createOrder")
+//    .exec(loggedUserCheck)
+    .exec(loginPage)
+    .exec(userAuthentication)
+    .exitHereIfFailed
+    .exec(getAuthorizationToken)
+    .exitHereIfFailed
+    .exec(setAuthCookie)
+    .exec(orderStatus)
+    .exec(autoSelect)
+    .exec(orderCreate)
+    .exec(orderDetails)
+    .exitHereIfFailed
+    .exec(availableFood)
+    
+  val payInit = scenario("paymentOption")
     .exec(citrusBank)
     .exec(paymentStart)
     .exitHereIfFailed

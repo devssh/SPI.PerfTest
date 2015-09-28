@@ -10,22 +10,12 @@ object Cinemas {
 
   val cityCookie: (String, String) = "Cookie" -> "cityName=chennai"
 
-  var
-  cleanSessionHeader = Map(
-    cityCookie
-  )
-
-  var formHeader = Map(
-    cityCookie,
-    "Content-Type" -> """application/x-www-form-urlencoded; charset=UTF-8"""
-  )
-
   val formatter =  new java.text.SimpleDateFormat("dd-MM-yyyy")
   val tomorrowDate = formatter.format((new DateTime).plusDays(1).toDate)
 
   var homePage = http("home_page")
     .get("/")
-    .headers(cleanSessionHeader)
+    .header(cityCookie._1,cityCookie._2)
     .check(status.is(200))
 
   var setAuthCookie = addCookie(Cookie("spi_access_token","${authToken}"))
@@ -151,18 +141,20 @@ object Cinemas {
 
   var price   = http("price").get("/chennai/ticket/prices").queryParam("sessionId","${session_id}".replaceAll(" ","+")).check(status.is(200))
 
-  var fuelPay = http("fuel_pay").post("/fuel").body(StringBody("fuelCardNumber=9800000112223137&pin=1977&orderId=${orderId}&tc=true&banyan=true")).headers(formHeader).check(status.is(200))
 
   var sessionAvailability = http("session_availability")
     .post("/chennai/sessions/session-availability").asJSON
     .body(StringBody("""{"sessionIds": [${session_id}],"movieName": "${movie_name}"}"""))
     .check(status.is(200))
 
-  var quick_book = http("quick_book").post("/chennai/ticket/${movie_name}/auto-select").
-    body(StringBody("""{"sessionId": "${session_id}","seatCategory": "${category}","movieName": "${movie_name}","quantity": ${quantity},"selectedCity": "chennai","isAutoSelected": true }"""))
-    .asJSON
+  var autoSelect = http("auto_select_seat").post("/chennai/ticket/${movie_name}/auto-select")
+  .header("Authorization","Bearer ${authToken}")
+  .body(StringBody("""{"sessionId":"${session_id}","seatCategory":"${category}","movieName":"${movie_name}","quantity":${quantity},"selectedCity":"chennai","isAutoSelected":true}"""))
+    .asJSON.check(status.is(200))
 
-
+  var instantPay = http("instant_pay").post("/order/buy_food_and_pay_instantly")
+    .body(StringBody("""foodRequestJson=%7B%22orderId%22:%22${orderId}%22,%22foodWithQty%22:%7B%7D%7D"""))
+    .asFormUrlEncoded.check(status.is(303))
 
   var vistaLayout = http("blockTicketsAndGetSeatLayout")
     .post("/vista/blockTicketsAndGetSeatLayout").asJSON
