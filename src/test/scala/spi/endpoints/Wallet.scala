@@ -9,7 +9,7 @@ object Wallet {
 
   var walletPay = http("wallet_pay")
     .post("/wallet/pay")
-    .header("Authorization", "Bearer OAv0pAbJTp7GqEKeC5zttDvfCWCXqS4wxx2tzw5mLfO3OBRAXkYH0nuV2S7Ip5WY")
+    .header("Authorization", "Bearer lOcbvnhCd5FYaWeK04DJeufjBaHxIoO7gJTotdn6EGLnQgKtyCQQ5oBTTm6CPTyb")
     .body(StringBody(
     """ {
           "walletId":"${wallet_id}",
@@ -31,7 +31,7 @@ object Wallet {
 
   var walletRecharge = http("wallet_recharge")
     .post("/wallet/credit/recharge")
-    .header("Authorization", "Bearer OAv0pAbJTp7GqEKeC5zttDvfCWCXqS4wxx2tzw5mLfO3OBRAXkYH0nuV2S7Ip5WY")
+    .header("Authorization", "Bearer lOcbvnhCd5FYaWeK04DJeufjBaHxIoO7gJTotdn6EGLnQgKtyCQQ5oBTTm6CPTyb")
     .body(StringBody(
     """ {
           "walletId":"${wallet_id}",
@@ -51,5 +51,33 @@ object Wallet {
         }""")).asJSON.check(status.is(200))
 
 
+  var walletById = http("wallet_by_id")
+    .post("/wallet/lookup_by_wallet_id")
+    .header("Authorization", "Bearer lOcbvnhCd5FYaWeK04DJeufjBaHxIoO7gJTotdn6EGLnQgKtyCQQ5oBTTm6CPTyb")
+    .body(StringBody(
+    """ {
+          "walletId":"${wallet_id}",
+          "email":"",
+          "mobileNumber":"",
+          "oldFuelCardNumber":""
+        }""")).asJSON.check(status.is(200))
+
+  var walletByEmail = http("wallet_by_email")
+    .post("/wallet/lookup_by_user_details")
+    .header("Authorization", "Bearer lOcbvnhCd5FYaWeK04DJeufjBaHxIoO7gJTotdn6EGLnQgKtyCQQ5oBTTm6CPTyb")
+    .body(StringBody(
+    """ {
+          "email":"${email}",
+          "mobileNumber":"${mobile_number}"
+        }""")).asJSON.check(status.is(200))
+
+  var walletByFuel = http("wallet_by_fuel")
+    .post("/wallet/lookup_by_fuel_number")
+    .header("Authorization", "Bearer lOcbvnhCd5FYaWeK04DJeufjBaHxIoO7gJTotdn6EGLnQgKtyCQQ5oBTTm6CPTyb")
+    .body(StringBody("""{"oldFuelCardNumber":"${fuel_card_number}"}""")).check(status.is(200))
+
+  var walletTransactions = http("wallet_transactions")
+    .get("/wallet/transaction_history?page=0")
+    .check(status.is(200))
 
 }
