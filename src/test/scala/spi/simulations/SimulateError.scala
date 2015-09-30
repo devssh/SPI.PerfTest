@@ -3,16 +3,17 @@ package spi.simulations
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
 import spi.DataSetup._
+import spi.endpoints.Cinemas._
 import spi.endpoints.Oauth._
 import spi.endpoints.Wallet._
 import spi.utils.Properties._
 
 import scala.concurrent.duration._
 
-class Wallet  extends Simulation  {
+class SimulateError  extends Simulation  {
 
   val httpConf = http
-    .baseURL(walletUrl)
+    .baseURL(baseUrl)
     .extraInfoExtractor(extraInfo =>
     List( extraInfo.request,extraInfo.request.getUri ,extraInfo.session,extraInfo.request.getHeaders,extraInfo.request.getCookies,
       extraInfo.request.getFormParams,extraInfo.request.getQueryParams,
@@ -24,19 +25,23 @@ class Wallet  extends Simulation  {
     .exec(walletPay)
     .exec(walletRecharge)
 
-  val walletTransaction = scenario("wallet_transaction").feed(userFeeder)
+  val walletTransaction = scenario("wallet_transaction").feed(userFeeder).feed(movieFeeder).feed(quantityFeeder)
     .exec(userAuthentication)
     .exec(getAuthorizationToken)
+    .repeat(100)
+    {
+      exec(walletDetails)
     .exec(walletTransactions)
+    }
+
 
   val walletSearch = scenario("wallet_search").feed(oldFuelFeeder).feed(userFeeder).feed(walletFeeder)
     .exec(walletById)
     .exec(walletByEmail)
 
 
+
   setUp(
-    walletPayRecharge.inject(constantUsersPerSec(30) during(120 second)),
-    walletSearch.inject(constantUsersPerSec(30) during(120 second))
-//    walletTransaction.inject(constantUsersPerSec(100) during(120 second))
+    walletTransaction.inject(constantUsersPerSec(100) during(30 second))
   ).protocols(httpConf)
 }

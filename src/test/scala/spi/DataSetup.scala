@@ -17,7 +17,7 @@ object DataSetup {
     "sessions.id in (select id from sessions where date(start_time) = CURRENT_DATE+1 and cinema_name = 'LUXE' limit 20) or " +
     "sessions.id in (select id from sessions where date(start_time) = CURRENT_DATE+1 and cinema_name = 'Escape' limit 20) "
 
-  val usersQuery = "select distinct(email) from users " +
+  val usersQuery = "select email,mobile_number from users " +
     "where is_active is true and password='yd+8vQnf2ajO3RZxAecJXw==' " +
     "limit 10000"
 

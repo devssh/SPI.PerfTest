@@ -62,19 +62,19 @@ object Wallet {
           "oldFuelCardNumber":""
         }""")).asJSON.check(status.is(200))
 
+  var walletDetails = http("wallet_details")
+    .get("/wallet/details").check(status.is(200))
+
   var walletByEmail = http("wallet_by_email")
     .post("/wallet/lookup_by_user_details")
     .header("Authorization", "Bearer lOcbvnhCd5FYaWeK04DJeufjBaHxIoO7gJTotdn6EGLnQgKtyCQQ5oBTTm6CPTyb")
     .body(StringBody(
-    """ {
-          "email":"${email}",
-          "mobileNumber":"${mobile_number}"
-        }""")).asJSON.check(status.is(200))
+    """ {"email":"${email}","mobileNumber":"${mobile_number}"}""")).asJSON.check(status.is(200))
 
   var walletByFuel = http("wallet_by_fuel")
     .post("/wallet/lookup_by_fuel_number")
     .header("Authorization", "Bearer lOcbvnhCd5FYaWeK04DJeufjBaHxIoO7gJTotdn6EGLnQgKtyCQQ5oBTTm6CPTyb")
-    .body(StringBody("""{"oldFuelCardNumber":"${fuel_card_number}"}""")).check(status.is(200))
+    .body(StringBody("""{"oldFuelCardNumber":"${fuel_card_number}"}""")).asJSON.check(status.is(200))
 
   var walletTransactions = http("wallet_transactions")
     .get("/wallet/transaction_history?page=0")
