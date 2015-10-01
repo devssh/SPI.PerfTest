@@ -4,9 +4,9 @@ import io.gatling.core.Predef._
 import io.gatling.http.Predef._
 import spi.DataSetup._
 import spi.ScenarioChains._
-import spi.endpoints.Cinemas
 import spi.endpoints.Cinemas._
 import spi.utils.Properties._
+import scala.concurrent.duration._
 
 class InstantPay extends Simulation {
 
@@ -30,7 +30,7 @@ class InstantPay extends Simulation {
 
 
   setUp(
-    checkTicketFlow.inject(atOnceUsers(5000)),
-    instantPayFlow.inject(atOnceUsers(2000))
+//    checkTicketFlow.inject(atOnceUsers(5000)),
+    instantPayFlow.inject(constantUsersPerSec(100) during(60 second))
   ).protocols(httpConf)
 }

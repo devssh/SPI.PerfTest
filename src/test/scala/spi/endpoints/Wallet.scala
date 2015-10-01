@@ -35,7 +35,7 @@ object Wallet {
     .body(StringBody(
     """ {
           "walletId":"${wallet_id}",
-          "rechargeAmount":100,
+          "rechargeAmount":10000,
           "clientIp":"10.10.1.01",
           "orderId":"123",
           "udf1":"1",

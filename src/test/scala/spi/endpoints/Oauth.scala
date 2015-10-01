@@ -45,5 +45,4 @@ object Oauth {
      .queryParam("response_type","spi_token")
      .check(status.in(List(200)), jsonPath("$.success").exists.saveAs("authToken"))
 
-
- }
+}

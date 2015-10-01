@@ -3,7 +3,6 @@ package spi.simulations
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
 import spi.DataSetup._
-import spi.endpoints.Cinemas._
 import spi.endpoints.Oauth._
 import spi.endpoints.Wallet._
 import spi.utils.Properties._
@@ -40,8 +39,7 @@ class SimulateError  extends Simulation  {
     .exec(walletByEmail)
 
 
-
   setUp(
-    walletTransaction.inject(constantUsersPerSec(100) during(30 second))
+    walletTransaction.inject(constantUsersPerSec(100) during(300 second))
   ).protocols(httpConf)
 }

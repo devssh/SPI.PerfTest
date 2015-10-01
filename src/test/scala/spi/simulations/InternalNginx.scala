@@ -9,10 +9,10 @@ import spi.utils.Properties._
 
 import scala.concurrent.duration._
 
-class Wallet  extends Simulation  {
+class InternalNginx  extends Simulation  {
 
   val httpConf = http
-    .baseURL(baseUrl)
+    .baseURL(internelNginx)
     .extraInfoExtractor(extraInfo =>
     List( extraInfo.request,extraInfo.request.getUri ,extraInfo.session,extraInfo.request.getHeaders,extraInfo.request.getCookies,
       extraInfo.request.getFormParams,extraInfo.request.getQueryParams,
@@ -20,24 +20,16 @@ class Wallet  extends Simulation  {
     .userAgentHeader("Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:37.0) Gecko/20100101 Firefox/37.0")
     .disableFollowRedirect
 
-  val walletPayRecharge = scenario("Wallet_Pay_Recharge").feed(walletFeeder)
-    .exec(walletRecharge)
-    .exitHereIfFailed
-    .repeat(10){
-      exec(walletPay).exitHereIfFailed
-    }
 
-  val walletTransaction = scenario("wallet_transaction").feed(userFeeder)
+  val internaeNginx = scenario("internae_nginx").feed(userFeeder)
     .exec(userAuthentication)
     .exec(getAuthorizationToken)
-    .exec(walletTransactions)
+    .rendezVous(1000).exec(userInfo)
 
-  val walletSearch = scenario("wallet_search").feed(oldFuelFeeder).feed(userFeeder).feed(walletFeeder)
-    .exec(walletById)
-    .exec(walletByEmail)
+
 
 
   setUp(
-    walletPayRecharge.inject(constantUsersPerSec(30) during(120 second))
+    internaeNginx.inject(constantUsersPerSec(200) during(300 second))
   ).protocols(httpConf)
 }

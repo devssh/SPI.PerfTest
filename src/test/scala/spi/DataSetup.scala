@@ -13,13 +13,13 @@ object DataSetup {
   val sessionsQuery =
     "select movie_name as full_movie_name,slugged_movie_name as movie_name,session_id,cinema_name,date(start_time) as date,category " +
     "from session_category_prices join sessions on session_id = sessions.id  where " +
-    "sessions.id in (select id from sessions where date(start_time) = CURRENT_DATE+1 and cinema_name = 'Sathyam Cinemas' limit 20) or " +
-    "sessions.id in (select id from sessions where date(start_time) = CURRENT_DATE+1 and cinema_name = 'LUXE' limit 20) or " +
-    "sessions.id in (select id from sessions where date(start_time) = CURRENT_DATE+1 and cinema_name = 'Escape' limit 20) "
+    "sessions.id in (select id from sessions where date(start_time) = CURRENT_DATE+6 and cinema_name = 'Sathyam Cinemas' limit 20) or " +
+    "sessions.id in (select id from sessions where date(start_time) = CURRENT_DATE+6 and cinema_name = 'LUXE' limit 20) or " +
+    "sessions.id in (select id from sessions where date(start_time) = CURRENT_DATE+6 and cinema_name = 'Escape' limit 20) "
 
   val usersQuery = "select email,mobile_number from users " +
     "where is_active is true and password='yd+8vQnf2ajO3RZxAecJXw==' " +
-    "limit 10000"
+    "limit 100000"
 
   val walletQuery = "select wallet_id,user_id from wallets " +
     "where is_active is true " +
