@@ -27,6 +27,7 @@ class EndToEnd extends Simulation {
     .exec(createOrder)
     .exec(payInit)
     .exec(walletPayment)
+    .exec(checkHistory)
 
   val checkTicketFlow = scenario("check_ticket_flow").feed(movieFeeder).feed(quantityFeeder)
     .exec(browsingAvailability)

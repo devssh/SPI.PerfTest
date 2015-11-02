@@ -71,8 +71,8 @@ object ScenarioChains {
   val checkHistory = scenario("check history")
     .exec(bookedHistory)
     .exec(bookedHistoryList)
-    .exec(preBookHistory)
-    .exec(preBookHistoryList)
+//    .exec(preBookHistory)
+//    .exec(preBookHistoryList)
 
   val home_page = scenario("home page")
                   .exec(homePage)
