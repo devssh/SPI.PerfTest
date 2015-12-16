@@ -7,6 +7,7 @@ import Cinemas._
 import spi.ScenarioChains._
 import spi.DataSetup._
 import spi.utils.Properties._
+import scala.concurrent.duration._
 
 class EndToEnd extends Simulation {
 
@@ -36,7 +37,7 @@ class EndToEnd extends Simulation {
   val checkHomePage = scenario("check_home_page").exec(home_page)
 
   setUp(
-  checkTicketFlow.inject(atOnceUsers(1)),
-    walletFlow.inject(atOnceUsers(1))
+  checkTicketFlow.inject(rampUsers(5000) over(50 seconds)),
+    walletFlow.inject(rampUsers(2000) over(20 seconds))
   ).protocols(httpConf)
 }
