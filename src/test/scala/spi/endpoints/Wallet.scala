@@ -9,12 +9,12 @@ object Wallet {
 
   var walletPay = http("wallet_pay")
     .post("/wallet/pay")
-    .header("Authorization", "Bearer lOcbvnhCd5FYaWeK04DJeufjBaHxIoO7gJTotdn6EGLnQgKtyCQQ5oBTTm6CPTyb")
+    .header("Authorization", "Bearer 9TFW9rjG7EXJ09HnQ92SWu1wMyXWAeo4ttDmp6PCqF7sTz4hJPUrVg3Uk3jfAfE0")
     .body(StringBody(
     """ {
           "walletId":"${wallet_id}",
           "userId": "${user_id}",
-          "amount":100,
+          "amount":1,
           "clientIp":"10.10.1.01",
           "orderId":"${wallet_id}",
           "udf1":"1",

@@ -41,6 +41,7 @@ object DataSetup {
   val walletFeeder: RecordSeqFeederBuilder[Any] = jdbcFeeder(walletDbUrl, userName,"",walletQuery).circular
   val oldFuelFeeder =  csv("quantity.csv").random
   val quantityFeeder = csv("quantity.csv").random
+  val preBookFeeder = csv("prebook.csv").circular
   var authTokensList: List[Map[String,String]] = List[Map[String,String]]()
 
   var storeAuthTokenToRedis: (Session) => Validation[Session] = session => {

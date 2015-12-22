@@ -12,7 +12,7 @@ import scala.concurrent.duration._
 class Wallet  extends Simulation  {
 
   val httpConf = http
-    .baseURL(baseUrl)
+    .baseURL(walletUrl)
     .extraInfoExtractor(extraInfo =>
     List( extraInfo.request,extraInfo.request.getUri ,extraInfo.session,extraInfo.request.getHeaders,extraInfo.request.getCookies,
       extraInfo.request.getFormParams,extraInfo.request.getQueryParams,
@@ -21,11 +21,9 @@ class Wallet  extends Simulation  {
     .disableFollowRedirect
 
   val walletPayRecharge = scenario("Wallet_Pay_Recharge").feed(walletFeeder)
-    .exec(walletRecharge)
-    .exitHereIfFailed
-    .repeat(10){
-      exec(walletPay).exitHereIfFailed
-    }
+//    .exec(walletRecharge)
+      .exec(walletPay).exitHereIfFailed
+
 
   val walletTransaction = scenario("wallet_transaction").feed(userFeeder)
     .exec(userAuthentication)
@@ -38,6 +36,7 @@ class Wallet  extends Simulation  {
 
 
   setUp(
-    walletPayRecharge.inject(constantUsersPerSec(30) during(120 second))
+    walletPayRecharge.inject(atOnceUsers(4000))
+//    walletPayRecharge.inject(constantUsersPerSec(4000) during(120 second))
   ).protocols(httpConf)
 }

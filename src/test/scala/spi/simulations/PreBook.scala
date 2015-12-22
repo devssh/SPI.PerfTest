@@ -5,6 +5,7 @@ import io.gatling.http.Predef._
 import spi.DataSetup._
 import spi.endpoints.Oauth._
 import spi.endpoints.PreBook._
+import spi.endpoints.Cinemas._
 import spi.utils.Properties._
 import scala.concurrent.duration._
 
@@ -18,16 +19,19 @@ class PreBook extends Simulation {
     .userAgentHeader("Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:37.0) Gecko/20100101 Firefox/37.0")
     .disableFollowRedirect
 
-  val prebookOrder = scenario("Authentication").feed(userFeeder)
+  val prebookOrder = scenario("Authentication").feed(userFeeder).feed(preBookFeeder)
     .exec(userAuthentication)
     .exec(getAuthorizationToken)
     .exitHereIfFailed
+    .exec(commingSoon)
     .exec(getPrebook)
     .exec(createAndInstantPay)
+    .exitHereIfFailed
     .exec(prebookOrderDetails)
 
 
   setUp(
-    prebookOrder.inject(atOnceUsers(1))
+//    prebookOrder.inject(atOnceUsers(3000))
+    prebookOrder.inject(constantUsersPerSec(17) during(600 second))
   ).protocols(httpConf)
 }
