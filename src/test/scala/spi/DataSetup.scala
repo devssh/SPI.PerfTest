@@ -13,18 +13,22 @@ object DataSetup {
 
   val sessionsQuery =
     "select movie_name as full_movie_name,slugged_movie_name as movie_name,session_id,cinema_name,date(start_time) as date,category " +
-    "from session_category_prices join sessions on session_id = sessions.id  where " +
-    "sessions.id in (select id from sessions where date(start_time) = CURRENT_DATE+1 and cinema_name = 'Sathyam Cinemas' limit 20) or " +
-    "sessions.id in (select id from sessions where date(start_time) = CURRENT_DATE+1 and cinema_name = 'LUXE' limit 20) or " +
-    "sessions.id in (select id from sessions where date(start_time) = CURRENT_DATE+1 and cinema_name = 'Escape' limit 20) "
+    "from session_category_prices join sessions on session_id = sessions.id  where   " +
+    "sessions.id in (select id from sessions where status = 'ACTIVE' and date(start_time) in (CURRENT_DATE+5) and cinema_name = 'Sathyam Cinemas' order by start_time desc limit 20) or " +
+    "sessions.id in (select id from sessions where status = 'ACTIVE' and date(start_time) in (CURRENT_DATE+5) and cinema_name = 'Escape' order by start_time desc  limit 20) "
+//  Sathyam Cinemas
+//  Escape
+//  SPI Cinemas Palazzo
+//  S2 PERAMBUR
+
 
   val usersQuery = "select email,mobile_number from users " +
     "where is_active is true and password='yd+8vQnf2ajO3RZxAecJXw==' " +
-    "limit 100000"
+    " order by created_at limit 7000"
 
   val walletQuery = "select wallet_id,user_id from wallets " +
     "where is_active is true " +
-    "limit 1000000"
+    "limit 7000"
 
   val oldFuelQuery = "select fuel_card_number from old_fuel_details"
 

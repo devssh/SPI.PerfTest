@@ -10,6 +10,7 @@ object ScenarioChains {
 
   val browsingAvailability = scenario("checkTickets")
     .exec(homePage)
+    .rendezVous(5000)
     .exec(nowShowing)
     .exec(commingSoon)
     .exec(showTimes)
@@ -19,6 +20,7 @@ object ScenarioChains {
 
   val createOrder = scenario("createOrder")
     .exec(loggedUserCheck)
+    .rendezVous(2000)
     .exec(loginPage)
     .exec(userAuthentication)
     .exitHereIfFailed

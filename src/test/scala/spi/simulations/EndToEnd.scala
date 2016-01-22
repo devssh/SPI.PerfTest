@@ -37,7 +37,9 @@ class EndToEnd extends Simulation {
   val checkHomePage = scenario("check_home_page").exec(home_page)
 
   setUp(
-  checkTicketFlow.inject(rampUsers(5000) over(50 seconds)),
-    walletFlow.inject(rampUsers(2000) over(20 seconds))
+//  checkTicketFlow.inject(atOnceUsers(100)),
+//    walletFlow.inject(atOnceUsers(100))
+  checkTicketFlow.inject(rampUsers(5000) over(100 seconds)),
+    walletFlow.inject(rampUsers(2000) over(100 seconds))
   ).protocols(httpConf)
 }
