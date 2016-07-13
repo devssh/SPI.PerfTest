@@ -1,8 +1,8 @@
 
 package spi
 
+import io.gatling.commons.validation.Validation
 import io.gatling.core.Predef._
-import io.gatling.core.validation.Validation
 
 
 object AmazonDataSetup {

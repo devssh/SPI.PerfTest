@@ -19,9 +19,12 @@ class PreBook extends Simulation {
     .userAgentHeader("Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:37.0) Gecko/20100101 Firefox/37.0")
     .disableFollowRedirect
 
+  var noOfUsers = 100;
+
   val prebookOrder = scenario("Authentication").feed(userFeeder).feed(preBookFeeder)
     .exec(userAuthentication)
     .exec(getAuthorizationToken)
+    .rendezVous(noOfUsers)
     .exitHereIfFailed
     .exec(commingSoon)
     .exec(getPrebook)
@@ -32,6 +35,7 @@ class PreBook extends Simulation {
 
   setUp(
 //    prebookOrder.inject(atOnceUsers(3000))
-    prebookOrder.inject(constantUsersPerSec(17) during(600 second))
+    prebookOrder.inject(rampUsers(noOfUsers) over(10 seconds))
+//    prebookOrder.inject(constantUsersPerSec(1) during(1 second))
   ).protocols(httpConf)
 }
