@@ -27,10 +27,18 @@ class PreBook extends Simulation {
     .rendezVous(noOfUsers)
     .exitHereIfFailed
     .exec(commingSoon)
+    .rendezVous(noOfUsers)
     .exec(getPrebook)
+    .rendezVous(noOfUsers)
     .exec(createAndInstantPay)
     .exitHereIfFailed
     .exec(prebookOrderDetails)
+
+
+  val justPreBookOrder = scenario("Authentication").feed(userFeeder).feed(preBookFeeder)
+    .exec(userAuthentication)
+    .exec(getAuthorizationToken)
+    .exec(createAndInstantPay)
 
 
   setUp(

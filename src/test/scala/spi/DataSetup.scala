@@ -47,7 +47,8 @@ object DataSetup {
 
 
   val movieFeeder: RecordSeqFeederBuilder[Any] = jdbcFeeder(cinemasDbUrl, userName,"",sessionsQuery).circular
-  val userFeeder: RecordSeqFeederBuilder[Any] = jdbcFeeder(authDbUrl, userName,"",usersQuery).circular
+//  val userFeeder: RecordSeqFeederBuilder[Any] = jdbcFeeder(authDbUrl, userName,"",usersQuery).circular
+  val userFeeder =  csv("users.csv").circular
   val walletFeeder: RecordSeqFeederBuilder[Any] = jdbcFeeder(walletDbUrl, userName,"",walletQuery).circular
   val oldFuelFeeder =  csv("quantity.csv").random
   val quantityFeeder = csv("quantity.csv").random

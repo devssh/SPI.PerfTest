@@ -18,6 +18,11 @@ object ScenarioChains {
     .exec(moviePage)
     .exec(price)
 
+  val visitMoviePage = scenario("")
+    .exec(nowShowing)
+    .exec(movieAvailabilityForWeek)
+    .exec(moviePage)
+
   val createOrder = scenario("createOrder")
     .exec(loggedUserCheck)
 //    .rendezVous(2000)

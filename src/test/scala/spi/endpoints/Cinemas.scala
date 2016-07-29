@@ -40,8 +40,7 @@ object Cinemas {
     .check(status.is(200))
 
   var moviePage = http("movie_page")
-    .get("/chennai/now-showing/${movie_name}")
-    .queryParam("seats", "${quantity}")
+    .get("/chennai/now-showing/${movie_name}/")
     .check(status.is(200))
 
   var orderStatus = http("order status")
