@@ -43,6 +43,10 @@ object Cinemas {
     .get("/chennai/now-showing/${movie_name}/")
     .check(status.is(200))
 
+  var movie = http("movie")
+    .get("/movies/${full_movie_name}")
+    .check(status.is(200))
+
   var orderStatus = http("order status")
     .post("/order/status")
     .header("Authorization","Bearer ${authToken}")

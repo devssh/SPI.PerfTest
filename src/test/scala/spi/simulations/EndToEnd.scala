@@ -35,7 +35,8 @@ class EndToEnd extends Simulation {
 
 
   val checkHomePage = scenario("check_home_page").exec(home_page)
-  val visitMoviePageFlow = scenario("check_home_page").exec(visitMoviePage)
+  val visitMoviePageFlow = scenario("check_movie_page_2").feed(movieFeeder).exec(visitMoviePage)
+//  val visitMoviePageFlow1 = scenario("check_movie_page_1").feed(movieFeeder).exec(visitMoviePage)
 
   setUp(
   checkTicketFlow.inject(atOnceUsers(60)),
