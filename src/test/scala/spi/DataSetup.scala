@@ -14,13 +14,16 @@ object DataSetup {
   val sessionsQuery =
     "select movie_name as full_movie_name,slugged_movie_name as movie_name,session_id,cinema_name,date(start_time) as date,category " +
     "from session_category_prices join sessions on session_id = sessions.id  where  " +
-    "sessions.id in (select id from sessions where status = 'ACTIVE' and date(start_time) in (CURRENT_DATE+3) and cinema_name = 'Sathyam Cinemas' order by start_time  limit 20) or " +
-    "sessions.id in (select id from sessions where status = 'ACTIVE' and date(start_time) in (CURRENT_DATE+3) and cinema_name = 'Escape' order by start_time  limit 20) or " +
-  "sessions.id in (select id from sessions where status = 'ACTIVE' and date(start_time) in (CURRENT_DATE+3) and cinema_name = 'S2 PERAMBUR' order by start_time  limit 20)"
+    "sessions.id in (select id from sessions where status = 'ACTIVE' and date(start_time) in (CURRENT_DATE+1) and cinema_name = 'Sathyam Cinemas' order by start_time  limit 20) or " +
+    "sessions.id in (select id from sessions where status = 'ACTIVE' and date(start_time) in (CURRENT_DATE+1) and cinema_name = 'Escape' order by start_time  limit 20) or " +
+  "sessions.id in (select id from sessions where status = 'ACTIVE' and date(start_time) in (CURRENT_DATE+1) and cinema_name = 'S2 PERAMBUR' order by start_time  limit 20)"
 //  Sathyam Cinemas
 //  Escape
 //  SPI Cinemas Palazzo
 //  S2 PERAMBUR
+
+  val allActiveSessionQuery = "select session_id,category from session_category_prices join sessions on session_id = sessions.id  " +
+    " where status = 'ACTIVE' and start_time > now() and movie_name != 'DANGAL'"
 
   val prebookQuery = "select c.id coming_soon_id,c.slugged_movie_name movie_name,s.id shows from coming_soon_movies c " +
     "join pre_bookable_sessions p on p.coming_soon_id = c.id " +
@@ -47,6 +50,7 @@ object DataSetup {
 
 
   val movieFeeder: RecordSeqFeederBuilder[Any] = jdbcFeeder(cinemasDbUrl, userName,"",sessionsQuery).circular
+  val allSessionFeeder: RecordSeqFeederBuilder[Any] = jdbcFeeder(cinemasDbUrl, userName,"",allActiveSessionQuery).circular
 //  val userFeeder: RecordSeqFeederBuilder[Any] = jdbcFeeder(authDbUrl, userName,"",usersQuery).circular
   val userFeeder =  csv("users.csv").circular
   val walletFeeder: RecordSeqFeederBuilder[Any] = jdbcFeeder(walletDbUrl, userName,"",walletQuery).circular
