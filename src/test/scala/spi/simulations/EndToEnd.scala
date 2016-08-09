@@ -20,7 +20,10 @@ class EndToEnd extends Simulation {
     .userAgentHeader("Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:37.0) Gecko/20100101 Firefox/37.0")
     .disableFollowRedirect
 
-  val cancelFlow = scenario("canceledFlow").feed(userFeeder).feed(movieFeeder).feed(quantityFeeder)
+  val cancelFlow = scenario("canceledFlow")
+    .feed(movieFeeder)
+    .feed(userFeeder)
+    .feed(quantityFeeder)
     .exec(createOrder)
     .exec(cancelOrder)
 
@@ -35,12 +38,12 @@ class EndToEnd extends Simulation {
 
 
   val checkHomePage = scenario("check_home_page").exec(home_page)
-  val visitMoviePageFlow = scenario("check_movie_page_2").feed(movieFeeder).exec(visitMoviePage)
-//  val visitMoviePageFlow1 = scenario("check_movie_page_1").feed(movieFeeder).exec(visitMoviePage)
+  val visitMoviePageFlow = scenario("check_movie_page").feed(movieFeeder).exec(visitMoviePage)
 
   setUp(
-  checkTicketFlow.inject(atOnceUsers(60)),
-    walletFlow.inject(atOnceUsers(60))
+//    visitMoviePageFlow.inject(atOnceUsers(10000))
+  checkTicketFlow.inject(atOnceUsers(5000)),
+    walletFlow.inject(atOnceUsers(2000))
 //  checkTicketFlow.inject(rampUsers(5000) over(50 seconds)),
 //    walletFlow.inject(rampUsers(2000) over(50 seconds))
   ).protocols(httpConf)
