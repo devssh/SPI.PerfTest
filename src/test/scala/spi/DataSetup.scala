@@ -12,15 +12,15 @@ object DataSetup {
   val databaseUrl: String = "192.168.57.99:5432";
 
   val sessionsQuery =
-    "with active_sessions as (select * from sessions where status = 'ACTIVE' and date(start_time) in (CURRENT_DATE+3)) " +
+    "with active_sessions as (select * from sessions where status = 'ACTIVE' and date(start_time) in (CURRENT_DATE+1,CURRENT_DATE+2)) " +
     " select movie_name as full_movie_name,slugged_movie_name as movie_name,session_id,cinema_name,date(start_time) as date,category " +
     " from session_category_prices join sessions on session_id = sessions.id  where  " +
-    " sessions.id in (select id from active_sessions where cinema_name = 'Sathyam Cinemas' and lower(screen_name) in ('santham','sathyam','6degrees')  order by start_time  limit 10) or " +
-    " sessions.id in (select id from active_sessions where cinema_name = 'Sathyam Cinemas' and lower(screen_name) in ('studio-5','serene','seasons')  order by start_time  limit 10) or " +
-    " sessions.id in (select id from active_sessions where cinema_name = 'Escape'and lower(screen_name)  in ('blush','frame','kites')  order by start_time  limit 10) or " +
-    " sessions.id in (select id from active_sessions where cinema_name = 'Escape'and lower(screen_name) in ('spot','weave','streak')  order by start_time  limit 10) or " +
-    " sessions.id in (select id from active_sessions where cinema_name = 'SPI Cinemas Palazzo' and lower(screen_name)  in ('screen-1','screen-2','screen-3') limit 10) or " +
-    " sessions.id in (select id from active_sessions where cinema_name = 'SPI Cinemas Palazzo' and lower(screen_name)  in ('screen-7','screen-8','screen-9') limit 10) "
+    " sessions.id in (select id from active_sessions where cinema_name = 'Sathyam Cinemas' and lower(screen_name) in ('santham','sathyam','6degrees')  order by start_time  limit 20) or " +
+    " sessions.id in (select id from active_sessions where cinema_name = 'Sathyam Cinemas' and lower(screen_name) in ('studio-5','serene','seasons')  order by start_time  limit 20) or " +
+    " sessions.id in (select id from active_sessions where cinema_name = 'Escape'and lower(screen_name)  in ('blush','frame','kites')  order by start_time  limit 20) or " +
+    " sessions.id in (select id from active_sessions where cinema_name = 'Escape'and lower(screen_name) in ('spot','weave','streak')  order by start_time  limit 20) or " +
+    " sessions.id in (select id from active_sessions where cinema_name = 'SPI Cinemas Palazzo' and lower(screen_name)  in ('screen-1','screen-2','screen-3') limit 20) or " +
+    " sessions.id in (select id from active_sessions where cinema_name = 'SPI Cinemas Palazzo' and lower(screen_name)  in ('screen-7','screen-8','screen-9') limit 20) "
 //  Sathyam Cinemas
 //  Escape
 //  SPI Cinemas Palazzo

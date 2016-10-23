@@ -19,7 +19,7 @@ class PreBook extends Simulation {
     .userAgentHeader("Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:37.0) Gecko/20100101 Firefox/37.0")
     .disableFollowRedirect
 
-  var noOfUsers = 100;
+  var noOfUsers = 5000;
 
   val prebookOrder = scenario("Authentication").feed(userFeeder).feed(preBookFeeder)
     .exec(userAuthentication)

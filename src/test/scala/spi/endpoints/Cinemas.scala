@@ -101,9 +101,8 @@ object Cinemas {
     .check(status.in(List(303,200)))
 
   var availableFood  = http("food_availability")
-    .post("/food")
+    .get("/food/${cinema_name}")
     .header("Authorization","Bearer ${authToken}")
-    .body(StringBody("${cinema_name}")).asJSON
     .check(status.is(200))
 
 

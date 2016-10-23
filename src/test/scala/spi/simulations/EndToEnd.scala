@@ -42,8 +42,8 @@ class EndToEnd extends Simulation {
 
   setUp(
 //    visitMoviePageFlow.inject(atOnceUsers(10000))
-  checkTicketFlow.inject(atOnceUsers(5000)),
-    walletFlow.inject(atOnceUsers(2000))
+  checkTicketFlow.inject(atOnceUsers(1)),
+    walletFlow.inject(atOnceUsers(1))
 //  checkTicketFlow.inject(rampUsers(5000) over(50 seconds)),
 //    walletFlow.inject(rampUsers(2000) over(50 seconds))
   ).protocols(httpConf)
